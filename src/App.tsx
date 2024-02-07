@@ -75,7 +75,7 @@ const App: React.FC = () => {
           <h1 className="text-lg text-center font-semibold">LIFE HEALTH GLOBAL ASSISTANT</h1>
         </div>        
         {/* Chat container */}
-        <div className='backgroundImage flex-grow px-4 py-10'>
+        <div className='backgroundImage flex-grow px-4 py-3'>
           {/* Chat messages */}
           {messages.map((message, index) => (
             <div key={index} className={`speech ${message.role === 'bot' ? 'bg-green-400 rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px]' : 'bg-teal-600 rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-1'}`}>
