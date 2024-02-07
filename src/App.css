@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+
+#chat-title {
+  text-align: center;
+}
+
+.chat-bot-container {
+  display: flex;
+  width: fit-content;
+}
+
+
+.speech-ai {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  align-self: flex-start;
+ 
+}
+
+.speech-human {
+  background-color: #2196f3;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  align-self: flex-end;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+#chat-query {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#submit {
+  width: calc(100% - 20px);
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: 1px solid #4caf50;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#submit:hover {
+  background-color: #45a049;
+  border-color: #45a049;
+}
+
+/* BackgroundImage.module.css */
+
+.backgroundImage {
+  background-image: url('/bg/stetho.jpg');
+}
+
+
+@media (max-width:  640px) {
+  .backgroundImage {
+    background-size: 365px 450px;
+    }
+}
+
+
+
+
