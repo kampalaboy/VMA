@@ -63,16 +63,6 @@ body {
 
 /* BackgroundImage.module.css */
 
-.backgroundImage {
-  background-image: url('/bg/stetho.jpg');
-}
-
-
-@media (max-width:  640px) {
-  .backgroundImage {
-    background-size: 365px 450px;
-    }
-}
 
 
 
