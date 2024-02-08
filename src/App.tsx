@@ -102,7 +102,7 @@ const App: React.FC = () => {
                         <input 
                         type="text" 
                         placeholder="Type a message" 
-                        className="text-sm focus:outline-none text-black h-10 rounded-lg px-5 py-4 w-full"
+                        className="text-sm focus:outline-none h-10 rounded-lg px-5 py-4 w-full"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
                          />
