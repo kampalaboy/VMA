@@ -1,5 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import './App.css';
+// import { FaMicrophone } from "react-icons/fa";
+import { MdSend } from "react-icons/md";
 
 
 const App: React.FC = () => {
@@ -68,37 +70,53 @@ const App: React.FC = () => {
     }        
   };
 
-  return (
-    <main>
-      <div className="w-screen flex-col justify-center">
-        <div className="fixed w-full z-10 bg-teal-800 text-white px-4 py-2 top-0">
-          <h1 className="text-lg text-center font-semibold">LIFE HEALTH GLOBAL ASSISTANT</h1>
-        </div>        
-        {/* Chat container */}
-        <div className='bg-gradient-to-tr bg-teal-100   flex-grow px-4 py-10'>
-          {/* Chat messages */}
-          {messages.map((message, index) => (
-            <div key={index} className={`speech ${message.role === 'bot' ? 'bg-green-400 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px]' : 'bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-1'}`}>
-              {message.content}
+  return(
+    <div className="border-black w-screen flex flex-col h-[100vh] z-10 ">
+
+      {/* Header*/}
+        <div className="h-16 px-4 py-3 flex justify-between items-center bg-blue-300 z-10">
+            <div className="flex items-center justify-center gap-6 ">
+                <div className="flex flex-col">
+                    <span className="text-primary-strong"> Life Health Chat Assistant</span>
+                </div>
             </div>
+        </div>
+       {/* Messages Container*/}
+
+       <div className=" bg-teal-100 h-[80vh] w-full relative flex-grow overflow-auto">
+            {messages.map((message, index) => (
+                <div key={index} className={`${message.role === 'bot' ? 'bg-green-400 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px]' :
+                                                                        'bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-1'}`}>
+                {message.content}
+                </div>
           ))}
         </div>
-        
-        {/* Input form */}
-        <form onSubmit={handleSubmit} className="bg-rose-700  border-lime-300 px-4 py-3 flex items-center">
-          <input
-            type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-grow px-3 py-2 border border-gray-300 rounded-lg focus:outline-none"
-          />
-          <button type="submit" className="ml-3 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none">
-            Send
-          </button>
-        </form>
-      </div>
-    </main>
+
+
+        {/* Send Messages*/}
+
+        <div className="bg-rose-500 h-20 px-4 flex items-center gap-4 relative">
+            
+            <div className="flex w-full gap-6">
+                <form onSubmit={handleSubmit}className="flex w-full gap-6" >
+                        <input 
+                        type="text" 
+                        placeholder="Type a message" 
+                        className="text-sm focus:outline-none text-black h-10 rounded-lg px-5 py-4 w-full"
+                        value={userInput}
+                        onChange={(e) => setUserInput(e.target.value)}
+                         />
+                    <div className="flex w-10 items-center justify-center">
+                        <button type='submit'>
+                            <MdSend className="text-gray-400 cursor-pointer text-xl" title="Talk to Us!"/>
+                            {/* <FaMicrophone/> */}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+    </div>
+  </div>
   );
 };
 
