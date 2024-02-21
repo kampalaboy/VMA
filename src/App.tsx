@@ -1,12 +1,14 @@
 import React, { useState, FormEvent } from 'react';
 import './App.css';
-// import { FaMicrophone } from "react-icons/fa";
+import { FaMicrophone } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 
 
 const App: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([{ role: 'bot', content: 'Welcome to Life Health, how can I assist?' }]);
   const [userInput, setUserInput] = useState<string>('');
+  const [showAudio, setShowAudio] = useState<boolean>(false);
+  
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -108,10 +110,14 @@ const App: React.FC = () => {
                          />
                     <div className="flex w-10 items-center justify-center">
                         <button type='submit'>
+                          {userInput.length?(
                             <MdSend className="text-gray-400 cursor-pointer text-xl" title="Talk to Us!"/>
-                            {/* <FaMicrophone/> */}
+                          ):(
+                            <FaMicrophone className="text-gray-400 cursor-pointer text-xl" onClick={()=>setShowAudio(true)}/>
+                            )}
                         </button>
                     </div>
+                    
                 </form>
             </div>
             
