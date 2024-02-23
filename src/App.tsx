@@ -5,7 +5,8 @@ import { MdSend } from "react-icons/md";
 
 
 const App: React.FC = () => {
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>([{ role: 'bot', content: 'Welcome to Life Health, how can I assist?' }]);
+
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([])
   const [userInput, setUserInput] = useState<string>('');
   const [loading, setLoading] =useState<boolean>(false);
   
@@ -21,10 +22,16 @@ const App: React.FC = () => {
     
     await startInteract(userInput, userMessage);
   };
+  const initialMessage = "Welcome to Life Health, how may I assist you today?"
 
+    useEffect(() => {
+      setMessages([{ role: 'bot', content: initialMessage }]);
+    }, []);
+  
 
   const startInteract = async (userInput: string, userMessage: { role: string; content: string }) => {
-  
+    
+
     const optionsText: RequestInit = {
       method: 'POST',
       headers: {
@@ -40,8 +47,8 @@ const App: React.FC = () => {
           model: 'gpt-3.5-turbo',
           temperature: 0.1,
           system: `You are an AI FAQ assistant for LifeHealth Global. 
-                    Information will be provided to help answer the user's questions.
-                    
+                    Information will be provided to help answer the user's questions.                    
+
                     If ${userInput} is a greeting, then respond with appropriate greeting.
                     Always summarize your response to be as brief as possible and be extremely concise. 
                     Your responses should be fewer than a couple of sentences. 
@@ -94,10 +101,10 @@ const App: React.FC = () => {
     <div className="border-black w-screen flex flex-col h-[100vh] z-10 ">
 
       {/* Header*/}
-        <div className="h-16 px-4 py-3 flex justify-between items-center bg-blue-300 z-10">
+        <div className="h-16 px-4 py-3 flex justify-center items-center bg-blue-300 z-10">
             <div className="flex items-center justify-center gap-6 ">
                 <div className="flex flex-col">
-                    <span className="text-primary-strong"> Life Health Chat Assistant</span>
+                    <span className="font-bold"> Life Health Chat Assistant</span>
                 </div>
             </div>
         </div>
@@ -118,7 +125,6 @@ const App: React.FC = () => {
         {/* Send Messages*/}
         <div className="bg-rose-500 h-20 px-4 flex items-center gap-4 relative">            
             <div className="flex w-full gap-6">
-           
                 <form onSubmit={handleSubmit} className="flex w-full gap-6" >
                         <input 
                         type="text" 
@@ -135,13 +141,11 @@ const App: React.FC = () => {
                             ):(
                              <FaMicrophone className="text-gray-400 cursor-pointer text-xl" 
                                            onClick={(event)=>{
-                                                                event.preventDefault();
-                                                              
+                                                                event.preventDefault();                                                              
                                                              }}/>
                             )}
                           </button>
                     </div>
-
                 </form>            
             </div> 
         </div>
