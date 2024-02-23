@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useRef, useEffect } from 'react';
 import './App.css';
 import { FaMicrophone } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
@@ -7,7 +7,6 @@ import { MdSend } from "react-icons/md";
 const App: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([{ role: 'bot', content: 'Welcome to Life Health, how can I assist?' }]);
   const [userInput, setUserInput] = useState<string>('');
-  const [showAudio, setShowAudio] = useState<boolean>(false);
   
 
   const handleSubmit = async (event: FormEvent) => {
@@ -22,7 +21,8 @@ const App: React.FC = () => {
 
 
   const startInteract = async (userInput: string, userMessage: { role: string; content: string }) => {
-    const options: RequestInit = {
+  
+    const optionsText: RequestInit = {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -49,14 +49,17 @@ const App: React.FC = () => {
                     If your answer is going to be longer than usual because of deeper explanation, put bullet points.  
                     Do the bullet points especially when the question is about steps to take.
                     
+                     
+                  
                     `
         },
         question: userInput,
       })
     };
-    
+
+       
     try {
-      const response = await fetch('https://general-runtime.voiceflow.com/knowledge-base/query', options);
+      const response = await fetch('https://general-runtime.voiceflow.com/knowledge-base/query', optionsText);
       const data = await response.json();
       console.log(data);
       // Extract the answer from the chunks array
@@ -72,6 +75,14 @@ const App: React.FC = () => {
     }        
   };
 
+  const latestMessage = useRef<HTMLDivElement>(null);
+
+  useEffect(()=>{
+    if (latestMessage.current){
+      latestMessage.current.scrollIntoView();
+    }
+  }, [messages]);
+
   return(
     <div className="border-black w-screen flex flex-col h-[100vh] z-10 ">
 
@@ -83,24 +94,23 @@ const App: React.FC = () => {
                 </div>
             </div>
         </div>
-       {/* Messages Container*/}
 
+       {/* Messages Container*/}
        <div className=" bg-teal-100 h-[80vh] w-full relative flex-grow overflow-auto">
             {messages.map((message, index) => (
                 <div key={index} className={`${message.role === 'bot' ? 'bg-green-400 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px]' :
                                                                         'bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-1'}`}>
                 {message.content}
-                </div>
-          ))}
+                </div> 
+              ))}
+               <div ref={latestMessage}></div>
         </div>
 
-
         {/* Send Messages*/}
-
-        <div className="bg-rose-500 h-20 px-4 flex items-center gap-4 relative">
-            
+        <div className="bg-rose-500 h-20 px-4 flex items-center gap-4 relative">            
             <div className="flex w-full gap-6">
-                <form onSubmit={handleSubmit}className="flex w-full gap-6" >
+           
+                <form onSubmit={handleSubmit} className="flex w-full gap-6" >
                         <input 
                         type="text" 
                         placeholder="Type a message" 
@@ -109,18 +119,22 @@ const App: React.FC = () => {
                         onChange={(e) => setUserInput(e.target.value)}
                          />
                     <div className="flex w-10 items-center justify-center">
-                        <button type='submit'>
-                          {userInput.length?(
-                            <MdSend className="text-gray-400 cursor-pointer text-xl" title="Talk to Us!"/>
-                          ):(
-                            <FaMicrophone className="text-gray-400 cursor-pointer text-xl" onClick={()=>setShowAudio(true)}/>
-                            )}
-                        </button>
-                    </div>
                     
-                </form>
-            </div>
-            
+                        <button  type='submit'>
+                        {userInput.length ? (
+                            <MdSend className="text-gray-400 cursor-pointer text-xl" title="Talk to Us!"/>
+                            ):(
+                             <FaMicrophone className="text-gray-400 cursor-pointer text-xl" 
+                                           onClick={(event)=>{
+                                                                event.preventDefault();
+                                                              
+                                                             }}/>
+                            )}
+                          </button>
+                    </div>
+
+                </form>            
+            </div> 
     </div>
   </div>
   );
