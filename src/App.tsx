@@ -7,15 +7,18 @@ import { MdSend } from "react-icons/md";
 const App: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([{ role: 'bot', content: 'Welcome to Life Health, how can I assist?' }]);
   const [userInput, setUserInput] = useState<string>('');
+  const [loading, setLoading] =useState<boolean>(false);
   
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    
 
     const userMessage = { role: 'user', content: userInput };
     setMessages([...messages, userMessage]);
     setUserInput('');
     // Call the fetch function
+    
     await startInteract(userInput, userMessage);
   };
 
@@ -57,10 +60,13 @@ const App: React.FC = () => {
       })
     };
 
-       
+    if (userInput) {
+      setLoading(true); // Show loader before making the API call
     try {
       const response = await fetch('https://general-runtime.voiceflow.com/knowledge-base/query', optionsText);
       const data = await response.json();
+
+      setLoading(false);
       console.log(data);
       // Extract the answer from the chunks array
       let answer: string = data.output;
@@ -71,9 +77,10 @@ const App: React.FC = () => {
       setMessages([...messages, userMessage, { role: 'bot', content: answer.trim() }]);
     } catch (error) {
       console.error(error);
+      setLoading(false);
       // Handle the error, e.g., display a user-friendly message to the user
     }        
-  };
+  }};
 
   const latestMessage = useRef<HTMLDivElement>(null);
 
@@ -96,13 +103,15 @@ const App: React.FC = () => {
         </div>
 
        {/* Messages Container*/}
-       <div className=" bg-teal-100 h-[80vh] w-full relative flex-grow overflow-auto">
+       <div id='message-container' className=" bg-teal-100 h-[80vh] w-full relative flex-grow overflow-auto">
+      
             {messages.map((message, index) => (
-                <div key={index} className={`${message.role === 'bot' ? 'bg-green-400 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px]' :
-                                                                        'bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-1'}`}>
+                <div key={index} className={`${message.role === 'bot' ? 'bg-green-400 text-black rounded-lg mb-[10px] ml-3 p-[10px] lg:max-w-[300px] max-w-[200px]' :
+                                                                        'bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3'}`}>
                 {message.content}
                 </div> 
               ))}
+              {loading && <img src="assets/loaders/MrHeartyReads.gif" id="loading" className="w-[100px] h-[100px]"/>}
                <div ref={latestMessage}></div>
         </div>
 
@@ -120,7 +129,7 @@ const App: React.FC = () => {
                          />
                     <div className="flex w-10 items-center justify-center">
                     
-                        <button  type='submit'>
+                        <button id='chat-submit' type='submit'>
                         {userInput.length ? (
                             <MdSend className="text-gray-400 cursor-pointer text-xl" title="Talk to Us!"/>
                             ):(
@@ -135,7 +144,7 @@ const App: React.FC = () => {
 
                 </form>            
             </div> 
-    </div>
+        </div>
   </div>
   );
 };
