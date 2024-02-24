@@ -88,7 +88,7 @@ const App: React.FC = () => {
       // Handle the error, e.g., display a user-friendly message to the user
     }        
   }};
-
+  
   const latestMessage = useRef<HTMLDivElement>(null);
 
   useEffect(()=>{
@@ -110,7 +110,7 @@ const App: React.FC = () => {
         </div>
 
        {/* Messages Container*/}
-       <div id='message-container' className=" bg-teal-100 h-[80vh] w-full relative flex-grow overflow-auto">
+       <div id='message-container' className=" bg-white h-[80vh] w-full relative flex-grow overflow-auto">
       
             {messages.map((message, index) => (
                 <div key={index} className={`${message.role === 'bot' ? 'bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] lg:max-w-[300px] max-w-[200px]' :
@@ -118,7 +118,9 @@ const App: React.FC = () => {
                 {message.content}
                 </div> 
               ))}
-              {loading && <img src="assets/loaders/MrHeartyReads.gif" id="loading" className="w-[100px] h-[100px] ml-3"/>}
+              {loading && <img src="assets/loaders/heartyread.gif" id="loading" className="w-[100px] h-[100px] ml-10"/> 
+                       
+              }
                <div ref={latestMessage}></div>
         </div>
 
@@ -135,7 +137,7 @@ const App: React.FC = () => {
                          />
                     <div className="flex w-10 items-center justify-center">
                     
-                        <button id='chat-submit' type='submit'>
+                        <button type='submit'>
                         {userInput.length ? (
                             <MdSend className="text-gray-400 cursor-pointer text-xl" title="Talk to Us!"/>
                             ):(
