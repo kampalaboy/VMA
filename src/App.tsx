@@ -9,6 +9,36 @@ const App: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([])
   const [userInput, setUserInput] = useState<string>('');
   const [loading, setLoading] =useState<boolean>(false);
+  const [imgSrc, setImgSrc] = useState<string>('');
+   const [language, setLanguage] = useState('');
+
+  const userLanguage = {eng: 'English', 
+                        fr: 'French', 
+                        esp:'Spanish', 
+                        swa:'Kiswahili', 
+                        lug:'Luganda', } 
+
+  useEffect(()=>{
+          const params = window.location.search;
+          const urlParams = new URLSearchParams(params);
+                      
+          const pname = urlParams.get('name') || ''
+          const plang = urlParams.get('lang')
+                      
+          const welcomeMessages = {
+                  eng: `Welcome to Life Health, ${pname} how can I assist?`,
+                  fr: `Bienvenue sur Life Health, ${pname}, comment puis-je vous aider ?`,
+                  esp: `Bienvenido a Life Health, ${pname} ¿en qué puedo ayudar?`,
+                  swa: `Karibu kwenye Life Health, ${pname} naweza kukusaidia vipi?`,
+                  lug: `Mwaniriziddwa mu Life Health, ${pname} nnyinza ntya okuyamba?`
+                            // Add more languages as needed
+                  };
+                      
+                  setMessages([
+                      { role: 'bot', content: welcomeMessages[plang  as keyof typeof welcomeMessages]|| welcomeMessages.eng}
+                            ]);
+                  setLanguage(plang || '')
+                },[])                      
   
 
   const handleSubmit = async (event: FormEvent) => {
@@ -19,17 +49,10 @@ const App: React.FC = () => {
     setMessages([...messages, userMessage]);
     setUserInput('');
     // Call the fetch function
-    
-    await startInteract(userInput, userMessage);
+    await startInteract(userInput, userMessage, language, userLanguage);
   };
-  const initialMessage = "Welcome to Life Health, how may I assist you today?"
 
-    useEffect(() => {
-      setMessages([{ role: 'bot', content: initialMessage }]);
-    }, []);
-  
-
-  const startInteract = async (userInput: string, userMessage: { role: string; content: string }) => {
+  const startInteract = async (userInput: string, userMessage: { role: string; content: string }, language: string, userLanguage:object) => {
     
 
     const optionsText: RequestInit = {
@@ -46,22 +69,58 @@ const App: React.FC = () => {
         settings: {
           model: 'gpt-3.5-turbo',
           temperature: 0.1,
-          system: `You are an AI FAQ assistant for LifeHealth Global. 
-                    Information will be provided to help answer the user's questions.                    
-
-                    If ${userInput} is a greeting, then respond with appropriate greeting.
-                    Always summarize your response to be as brief as possible and be extremely concise. 
-                    Your responses should be fewer than a couple of sentences. 
-                    Do not reference the material provided in your response.  
-                    please help this user with their question using the provided information. 
-                    Please rephrase the information in a clearer and more conversational way.
-
-                    If your answer is going to be longer than usual because of deeper explanation, put bullet points.  
-                    Do the bullet points especially when the question is about steps to take.
-                    
-                     
+          system:`You are an AI FAQ assistant for LifeHealth Global. 
+                  Information will be provided to help answer the user's questions.
                   
-                    `
+                  First of all check to see the ${language} then use the list of ${userLanguage} to pick the right language.  
+                  If ${userInput} is in a certain ${userLanguage} then respond to the questions in that ${userLanguage}
+
+                  ###
+                  If ${userInput} is a greeting, then respond with appropriate greeting.
+
+                  ${userInput} : 'Hello'
+                  response : 'Hello, how are you?'
+
+                  ${userInput} = 'Hi'
+                  response : 'Hi, how are you doing?'
+
+                  ${userInput} : 'What's up'
+                  response : 'Am doing good, how about you?'
+
+                  ###
+                  If ${userInput} is a question, then respond with appropriate answer.
+
+                  Always summarize your response to be as brief as possible and be concise. 
+                  Your responses should be fewer than a four sentences. 
+                  Do not reference the material provided in your response.  
+                  Please help this user with their question using the provided information. 
+                  Please rephrase the information in a clearer and more conversational way.
+
+                  
+                  ###
+                  If your answer is going to be longer than usual because of deeper explanation, number the steps to take.  
+                  Number the steps, and make sure the next step is a the beginning of a newline.
+                  That is: 
+                  1.
+                  2.
+                  3.
+                  4.
+                  etc
+                  The numbers should always be the first character of a new line containing the next step to take. 
+
+                  ${userInput}: How do I get a Life Health wallet?
+                  response : 
+                  To get a LifeHealth Wallet, you can follow these steps: 
+                  1. Download the LifeHealth Wallet mobile app from your app store. 
+                  2. Open the app and click on the "Getting Started" section. 
+                  3. Follow the instructions to create a LifeHealth Wallet account. 
+                  4. Complete the self-registration process by providing the required information. 
+                  5. Once registered, you can log in to your LifeHealth Wallet using your credentials. 
+                  6. Start using the app to access your personal medical records, store health vitals, manage appointments, and more.
+          `,
+
+        language: language,
+        userLanguage: userLanguage,
         },
         question: userInput,
       })
@@ -88,6 +147,27 @@ const App: React.FC = () => {
       // Handle the error, e.g., display a user-friendly message to the user
     }        
   }};
+
+  useEffect(() => {
+    const loaders = [
+      {id:1, imgSrc: 'assets/loaders/heartythink.gif' },
+      {id:2, imgSrc: 'assets/loaders/heartyread.gif' },
+      {id:3, imgSrc: 'assets/loaders/heartynotes.gif' },
+      {id:4, imgSrc: 'assets/loaders/heartysearch.gif' },
+      {id:5, imgSrc: 'assets/loaders/heartycompare.gif' },
+      {id:6, imgSrc: 'assets/loaders/heartywave.gif' },
+    ];
+    
+    
+    function getRandomLoader() {
+      const randomIndex = Math.floor(Math.random() * loaders.length);
+      return loaders[randomIndex];
+    }
+    const chosenImg1 = getRandomLoader();
+    const chosenImg2 = getRandomLoader();
+    const chosenImg3 = getRandomLoader();
+    setImgSrc(chosenImg1.imgSrc||chosenImg2.imgSrc||chosenImg3.imgSrc)
+  },[]);
   
   const latestMessage = useRef<HTMLDivElement>(null);
 
@@ -118,7 +198,7 @@ const App: React.FC = () => {
                 {message.content}
                 </div> 
               ))}
-              {loading && <img src="assets/loaders/heartyread.gif" id="loading" className="w-[100px] h-[100px] ml-10"/> 
+              {loading && <img src={imgSrc} id="loading" className="w-[100px] h-[100px] ml-10"/> 
                        
               }
                <div ref={latestMessage}></div>
