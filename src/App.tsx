@@ -67,12 +67,17 @@ const App: React.FC = () => {
         chunkLimit: 2,
         synthesis: true,
         settings: {
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-4',
           temperature: 0.1,
           system:`You are an AI FAQ assistant for LifeHealth Global. 
                   Information will be provided to help answer the user's questions.
+
+                  Information will also be provided in different languages from the ${userLanguage} list
+                  to help answer the user's questions incase English is not their language of choice.  You must
+                  translate your default response in English to the languange from ${language} and pick from the 
+                  ${userLanguage} list.
                   
-                  First of all check to see the ${language} then use the list of ${userLanguage} to pick the right language.  
+                  First of all check to see the language from ${language} then use the list of ${userLanguage} to pick the right language.  
                   If ${userInput} is in a certain ${userLanguage} then respond to the questions in that ${userLanguage}
 
                   ###
@@ -135,9 +140,21 @@ const App: React.FC = () => {
       setLoading(false);
       console.log(data);
       // Extract the answer from the chunks array
-      let answer: string = data.output;
+      let answer: string 
         if (data.output==null){
-          answer = 'Sorry, say that again.'
+          const params = window.location.search;
+          const urlParams = new URLSearchParams(params);
+          const plang = urlParams.get('lang')
+          const responses = 
+                          {eng: 'Sorry, say that again.',
+                          fr:'Désolé, répétez-le.'  ,
+                          esp:'Lo siento, dilo de nuevo.',
+                          swa:'Samahani, sema hivyo tena.',
+                          lug: 'Bambi, sikutegede ddamu okwogera ekyo.'}
+          
+                          answer = responses[plang as keyof typeof responses] || responses.eng;
+        } else {
+                          answer = data.output;
         }
       // Update state with bot's message
       setMessages([...messages, userMessage, { role: 'bot', content: answer.trim() }]);
@@ -167,7 +184,7 @@ const App: React.FC = () => {
     const chosenImg2 = getRandomLoader();
     const chosenImg3 = getRandomLoader();
     setImgSrc(chosenImg1.imgSrc||chosenImg2.imgSrc||chosenImg3.imgSrc)
-  },[]);
+  },[messages]);
   
   const latestMessage = useRef<HTMLDivElement>(null);
 
