@@ -26,11 +26,11 @@ const App: React.FC = () => {
           const plang = urlParams.get('lang')
                       
           const welcomeMessages = {
-                  eng: `Welcome to Life Health, ${pname} how can I assist?`,
-                  fr: `Bienvenue sur Life Health, ${pname}, comment puis-je vous aider ?`,
-                  esp: `Bienvenido a Life Health, ${pname} ¿en qué puedo ayudar?`,
-                  swa: `Karibu kwenye Life Health, ${pname} naweza kukusaidia vipi?`,
-                  lug: `Mwaniriziddwa mu Life Health, ${pname} nnyinza ntya okuyamba?`
+                  eng: `Welcome to Life Health, ${pname}.  How can I assist?`,
+                  fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider ?`,
+                  esp: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?`,
+                  swa: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?`,
+                  lug: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?`
                             // Add more languages as needed
                   };
                       
