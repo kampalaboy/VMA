@@ -174,16 +174,12 @@ const App: React.FC = () => {
       {id:5, imgSrc: 'assets/loaders/heartycompare.gif' },
       {id:6, imgSrc: 'assets/loaders/heartywave.gif' },
     ];
-    
-    
     function getRandomLoader() {
       const randomIndex = Math.floor(Math.random() * loaders.length);
       return loaders[randomIndex];
     }
-    const chosenImg1 = getRandomLoader();
-    const chosenImg2 = getRandomLoader();
-    const chosenImg3 = getRandomLoader();
-    setImgSrc(chosenImg1.imgSrc||chosenImg2.imgSrc||chosenImg3.imgSrc)
+    const chosenImg = getRandomLoader();
+    setImgSrc(chosenImg.imgSrc)
   },[messages]);
   
   const latestMessage = useRef<HTMLDivElement>(null);
