@@ -35,7 +35,7 @@ const App: React.FC = () => {
                   };
                       
                   setMessages([
-                      { role: 'bot', content: welcomeMessages[plang  as keyof typeof welcomeMessages]|| welcomeMessages.eng}
+                      { role: 'bot', content: welcomeMessages[plang  as keyof typeof welcomeMessages]||`Welcome to Life Health. How can I assist?`}
                             ]);
                   setLanguage(plang || '')
                 },[])                      
