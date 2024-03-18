@@ -194,6 +194,7 @@ const App: React.FC = () => {
     
     <div className="border-black w-screen flex flex-col h-screen z-10 ">
       
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 
       {/* Header*/}
         <div className="h-16 px-4 py-3 flex justify-center items-center bg-blue-300 z-10">
