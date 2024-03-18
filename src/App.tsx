@@ -191,7 +191,9 @@ const App: React.FC = () => {
   }, [messages]);
 
   return(
-    <div className="border-black w-screen flex flex-col h-[100vh] z-10 ">
+    
+    <div className="border-black w-screen flex flex-col h-screen z-10 ">
+      
 
       {/* Header*/}
         <div className="h-16 px-4 py-3 flex justify-center items-center bg-blue-300 z-10">
