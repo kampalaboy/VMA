@@ -244,6 +244,7 @@ const App: React.FC = () => {
                 </form>            
             </div> 
         </div>
+        <div ref={latestMessage}></div>
   </div>
   );
 };
