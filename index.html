@@ -1,20 +1,43 @@
 <!doctype html>
 <html lang="en">
-  <head>
+ <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/assets/hearty.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Life Health Global Assistant</title>
-  </head>
-  <body>
+    <style>
+      /* Adjust CSS as needed to ensure full screen display */
+      html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      #root {
+        height: 100%;
+      }
+    </style>
+ </head>
+ <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
+      // Function to request fullscreen mode
+      function requestFullscreen(elem) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+          elem.msRequestFullscreen();
+        }
+      }
+
+      // Request fullscreen mode on page load
       window.onload = function() {
-          setTimeout(function() {
-              window.scrollTo(0, 1);
-          }, 0);
+        requestFullscreen(document.documentElement);
       };
     </script>
-  </body>
+ </body>
 </html>
