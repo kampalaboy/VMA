@@ -30,8 +30,8 @@ const App: React.FC = () => {
                   en: `Welcome to Life Health, ${pname}.  How can I assist?`,
                   fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider ?`,
                   es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?`,
-                  nyn:`Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
                   lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?`,
+                  nyn:`Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
                   sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?`,
                             // Add more languages as needed
                   };
@@ -151,8 +151,8 @@ const App: React.FC = () => {
                           {en: 'Sorry, say that again.',
                           fr:'Désolé, répétez-le.',
                           es:'Lo siento, dilo de nuevo.',
-                          nyn:'Ihangane, ongera ubivuge.',
                           lg: 'Bambi, sikutegede ddamu okwogera ekyo.',
+                          nyn:'Ihangane, ongera ubivuge.',
                           sw:'Samahani, sema hivyo tena.'
                           }
                           
