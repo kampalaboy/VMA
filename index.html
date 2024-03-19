@@ -10,16 +10,10 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Function to scroll up and then down
-      function autoScroll() {
-        window.scrollTo(0, 1); // Scroll up
-        setTimeout(function() {
-          window.scrollTo(0, 0); // Scroll down
-        }, 100); // Adjust the delay as needed
-      }
-
-      // Call the autoScroll function on page load
-      window.onload = autoScroll;
+      const elem = document.getElementById("root");
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        }
     </script>
  </body>
 </html>
