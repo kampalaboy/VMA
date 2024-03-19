@@ -10,7 +10,11 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      document.documentElement.requestFullscreen();
+      window.onload = function() {
+          setTimeout(function() {
+              window.scrollTo(0, 1);
+          }, 0);
+      };
     </script>
   </body>
 </html>
