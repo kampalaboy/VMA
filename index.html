@@ -9,5 +9,23 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Function to hide the address bar on page load
+      function hideAddressBar() {
+        if (!window.location.hash) {
+          if (document.height < window.outerHeight) {
+            document.body.style.height = (window.outerHeight + 50) + 'px';
+          }
+
+          setTimeout(function () {
+            window.scrollTo(0, 1);
+          }, 50);
+        }
+      }
+
+      // Execute the function on page load
+      window.onload = hideAddressBar;
+      window.onresize = hideAddressBar;
+    </script>
   </body>
 </html>
