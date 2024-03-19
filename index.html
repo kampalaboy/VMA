@@ -5,39 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/assets/hearty.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Life Health Global Assistant</title>
-    <style>
-      /* Adjust CSS as needed to ensure full screen display */
-      html, body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-      }
-      #root {
-        height: 100%;
-      }
-    </style>
  </head>
  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Function to request fullscreen mode
-      function requestFullscreen(elem) {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) { /* Firefox */
-          elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-          elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) { /* IE/Edge */
-          elem.msRequestFullscreen();
-        }
+      // Function to scroll up and then down
+      function autoScroll() {
+        window.scrollTo(0, 1); // Scroll up
+        setTimeout(function() {
+          window.scrollTo(0, 0); // Scroll down
+        }, 100); // Adjust the delay as needed
       }
 
-      // Request fullscreen mode on page load
-      window.onload = function() {
-        requestFullscreen(document.documentElement);
-      };
+      // Call the autoScroll function on page load
+      window.onload = autoScroll;
     </script>
  </body>
 </html>
