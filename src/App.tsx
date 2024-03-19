@@ -12,11 +12,12 @@ const App: React.FC = () => {
   const [imgSrc, setImgSrc] = useState<string>('');
    const [language, setLanguage] = useState('');
 
-  const userLanguage = {eng: 'English', 
-                        fr: 'French', 
-                        esp:'Spanish', 
-                        swa:'Kiswahili', 
-                        lug:'Luganda', } 
+  const userLanguage = {en:"English", 
+                        fr:"French",
+                        es:"Spanish", 
+                        lg:"Luganda", 
+                        nyn:"Runyankolo", 
+                        sw:"Swahili" } 
 
   useEffect(()=>{
           const params = window.location.search;
@@ -26,11 +27,12 @@ const App: React.FC = () => {
           const plang = urlParams.get('lang')
                       
           const welcomeMessages = {
-                  eng: `Welcome to Life Health, ${pname}.  How can I assist?`,
+                  en: `Welcome to Life Health, ${pname}.  How can I assist?`,
                   fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider ?`,
-                  esp: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?`,
-                  swa: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?`,
-                  lug: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?`
+                  es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?`,
+                  nyn:`Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
+                  lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?`,
+                  sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?`,
                             // Add more languages as needed
                   };
                       
@@ -146,13 +148,15 @@ const App: React.FC = () => {
           const urlParams = new URLSearchParams(params);
           const plang = urlParams.get('lang')
           const responses = 
-                          {eng: 'Sorry, say that again.',
-                          fr:'Désolé, répétez-le.'  ,
-                          esp:'Lo siento, dilo de nuevo.',
-                          swa:'Samahani, sema hivyo tena.',
-                          lug: 'Bambi, sikutegede ddamu okwogera ekyo.'}
-          
-                          answer = responses[plang as keyof typeof responses] || responses.eng;
+                          {en: 'Sorry, say that again.',
+                          fr:'Désolé, répétez-le.',
+                          es:'Lo siento, dilo de nuevo.',
+                          nyn:'Ihangane, ongera ubivuge.',
+                          lg: 'Bambi, sikutegede ddamu okwogera ekyo.',
+                          sw:'Samahani, sema hivyo tena.'
+                          }
+                          
+                          answer = responses[plang as keyof typeof responses] || responses.en;
         } else {
                           answer = data.output;
         }
