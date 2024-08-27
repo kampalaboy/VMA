@@ -257,7 +257,7 @@ const App: React.FC = () => {
             }`}
           >
             {message.content}
-            {language}
+
           </div>
         ))}
         {loading && (
