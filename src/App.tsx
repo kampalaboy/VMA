@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [language, setLanguage] = useState("");
 
   const userLanguage = {
+
     en: "English",
     fr: "French",
     es: "Spanish",
@@ -47,7 +48,6 @@ const App: React.FC = () => {
   }, []);
 
   const pid = urlParams.get("id");
-
   const startInteract = async (
     userInput: string,
     userMessage: { role: string; content: string },
@@ -70,7 +70,7 @@ const App: React.FC = () => {
                                   You are a cautious assistant. You carefully follow instructions. 
                                   You are helpful and harmless and you follow ethical guidelines and promote positive behavior. 
                                   If you do not find the answer reply to the question appropriately. 
-                                  Reply to ${userInput} in the ${userLanguage} that has been prompted. 
+                                  Reply to ${userInput} in the ${userLanguage} that has been prompted in the appropriate ${language}. 
                                   <|user|>\n{context_str}\n\n{query_str}\n<|assistant|>
                                 `,
         es_index_name: "health-docs-index",
