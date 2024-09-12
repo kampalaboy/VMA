@@ -158,6 +158,17 @@ const App: React.FC = () => {
 
         setLoading(false);
         console.log(data);
+
+        function formatResponse(text: string) {
+          const lines = text.trim().split("\n");
+          const formattedLines = lines.map((line) => {
+            if (/^\d+\./.test(line.trim())) {
+              return line.replace(".", "no.");
+            }
+            return line;
+          });
+          return formattedLines.join("\n");
+        }
         // Extract the answer from the chunks array
         let answer: string;
         if (data.response == "") {
@@ -174,6 +185,8 @@ const App: React.FC = () => {
           answer = replies[plang as keyof typeof replies] || replies.en;
         } else {
           answer = data.response;
+          // answer = answer.replace(/\n?\s*(\d+)\./g, "\n$1.");
+          // answer = formatResponse(data.response);
         }
         // Update state with bot's message
         setMessages([
@@ -249,7 +262,12 @@ const App: React.FC = () => {
                 : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
             }`}
           >
-            {message.content}
+            {message.content.split("\n").map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < message.content.split("\n").length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </div>
         ))}
         {loading && (
