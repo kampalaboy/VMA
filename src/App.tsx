@@ -159,16 +159,6 @@ const App: React.FC = () => {
         setLoading(false);
         console.log(data);
 
-        function formatResponse(text: string) {
-          const lines = text.trim().split("\n");
-          const formattedLines = lines.map((line) => {
-            if (/^\d+\./.test(line.trim())) {
-              return line.replace(".", "no.");
-            }
-            return line;
-          });
-          return formattedLines.join("\n");
-        }
         // Extract the answer from the chunks array
         let answer: string;
         if (data.response == "") {
