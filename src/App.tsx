@@ -4,14 +4,15 @@ import { FaMicrophone } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 
 const App: React.FC = () => {
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>(
+    []
+  );
   const [userInput, setUserInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [imgSrc, setImgSrc] = useState<string>("");
   const [language, setLanguage] = useState("");
 
   const userLanguage = {
-
     en: "English",
     fr: "French",
     es: "Spanish",
@@ -34,7 +35,6 @@ const App: React.FC = () => {
       lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?`,
       nyn: `Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
       sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?`,
-      // Add more languages as needed
     };
     setMessages([
       {
@@ -58,21 +58,14 @@ const App: React.FC = () => {
       method: "POST",
       headers: {
         accept: "application/json",
-        "content-type": "application/json",
+        "Content-Type": "application/json",
         "RAG-APP-API-Key": "Quick2go!",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         question: userInput,
         dbtype: "MYSQL",
-        ragllm_instructions: `<|system|>\n
-                                  You are an AI FAQ assistant for LifeHealth Global.
-                                  You are HealthApp Chat, an AI language model developed by IBM. 
-                                  You are a cautious assistant. You carefully follow instructions. 
-                                  You are helpful and harmless and you follow ethical guidelines and promote positive behavior. 
-                                  If you do not find the answer reply to the question appropriately. 
-                                  Reply to ${userInput} in the ${userLanguage} that has been prompted in the appropriate ${language}. 
-                                  <|user|>\n{context_str}\n\n{query_str}\n<|assistant|>
-                                `,
+        rag_llm_instructions: `Reply to ${userInput} in the ${userLanguage} determined by the parameter ${language}`,
         es_index_name: "health-docs-index",
         user_id: pid,
         es_index_text_field: "body_content_field",
@@ -80,7 +73,7 @@ const App: React.FC = () => {
         es_model_text_field: "ml.tokens",
         num_results: "5",
         sqlllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "ibm/granite-13b-instruct-v2",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -98,7 +91,7 @@ const App: React.FC = () => {
           },
         },
         classifyllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "ibm/granite-13b-instruct-v2",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -116,7 +109,7 @@ const App: React.FC = () => {
           },
         },
         ragllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "ibm/granite-13b-instruct-v2",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -134,7 +127,7 @@ const App: React.FC = () => {
           },
         },
         generalllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "ibm/granite-13b-instruct-v2",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -158,7 +151,7 @@ const App: React.FC = () => {
       setLoading(true); // Show loader before making the API call
       try {
         const res = await fetch(
-          "https://gen-llm-service.1iv6psdwvd0v.us-south.codeengine.appdomain.cloud/watsonchat",
+          "https://gen-llm-service.1lp3bct1ee25.us-south.codeengine.appdomain.cloud/watsonchat",
           optionsText
         );
         const data = await res.json();
@@ -257,7 +250,6 @@ const App: React.FC = () => {
             }`}
           >
             {message.content}
-
           </div>
         ))}
         {loading && (
@@ -291,7 +283,7 @@ const App: React.FC = () => {
                 ) : (
                   <FaMicrophone
                     className="text-gray-400 cursor-pointer text-xl"
-                    onClick={(e:any) => {
+                    onClick={(e: any) => {
                       e.preventDefault();
                     }}
                   />
