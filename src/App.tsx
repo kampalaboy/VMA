@@ -71,13 +71,13 @@ const App: React.FC = () => {
         es_index_text_field: "body_content_field",
         es_model_name: ".elser_model_2",
         es_model_text_field: "ml.tokens",
-        num_results: "5",
+        num_results: "3",
         sqlllm_params: {
           model_id: "ibm/granite-13b-instruct-v2",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 500,
+            max_new_tokens: 200,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -95,7 +95,7 @@ const App: React.FC = () => {
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 500,
+            max_new_tokens: 200,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -113,7 +113,7 @@ const App: React.FC = () => {
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 500,
+            max_new_tokens: 200,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -131,7 +131,7 @@ const App: React.FC = () => {
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 500,
+            max_new_tokens: 200,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -151,7 +151,7 @@ const App: React.FC = () => {
       setLoading(true); // Show loader before making the API call
       try {
         const res = await fetch(
-          "https://gen-llm-service.1lp3bct1ee25.us-south.codeengine.appdomain.cloud/watsonchat",
+          "https://gen-llm-service.1lvzmjbcniiy.us-south.codeengine.appdomain.cloud/watsonchat",
           optionsText
         );
         const data = await res.json();
