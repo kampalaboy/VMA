@@ -1,13 +1,16 @@
 import React, { useState, FormEvent, useRef, useEffect } from "react";
 import "./App.css";
 import { FaMicrophone } from "react-icons/fa";
-import { MdSend } from "react-icons/md";
+import { MdOutlineHealthAndSafety, MdSend } from "react-icons/md";
+import { RiSearch2Line } from "react-icons/ri";
 
 const App: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     []
   );
   const [userInput, setUserInput] = useState<string>("");
+  const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
+  const [responser, setResponser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [imgSrc, setImgSrc] = useState<string>("");
   const [language, setLanguage] = useState("");
@@ -16,43 +19,120 @@ const App: React.FC = () => {
     en: "English",
     fr: "French",
     es: "Spanish",
+    pt: "Portuguese",
     lg: "Luganda",
     nyn: "Runyankole",
     sw: "Swahili",
+    am: "Amharic",
+    hi: "Hindi",
+    ar: "Arabic",
   };
 
   const params = window.location.search;
   const urlParams = new URLSearchParams(params);
+  const pname = urlParams.get("name") || "";
+  const plang = urlParams.get("lang");
+  const pid = urlParams.get("id");
 
   useEffect(() => {
-    const pname = urlParams.get("name") || "";
-    const plang = urlParams.get("lang");
-
     const welcomeMessages = {
-      en: `Welcome to Life Health, ${pname}.  How can I assist?`,
-      fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider ?`,
-      es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?`,
-      lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?`,
+      en: `Welcome to Life Health, ${pname}.  How can I assist?
+      
+          Use the buttons below as follows:
+                🏥 : Query about health or the app 
+                🔍 : Search your Database
+                ↗️ : Try a general question`,
+      fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider?
+
+          Utilisez les boutons ci-dessous comme suit:
+              🏥: Requête sur la santé
+              🔍: Rechercher dans votre base de données
+              ↗️: Essayer une question générale`,
+
+      es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?
+      
+          Utilice los botones siguientes de la siguiente manera:
+                🏥: Consulta de salud
+                🔍: Busca en tu base de datos
+                ↗️: Prueba una pregunta general
+          `,
+      pt: `Bem-vindo à Life Health, ${pname}. Como posso ajudar?
+
+            Utilize os botões abaixo da seguinte forma:
+            🏥: Consulta sobre saúde ou aplicação
+            🔍: Pesquise a sua base de dados
+            ↗️: Tente uma pergunta geral`,
+      lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?
+
+                Kozesa obutambi buno wammanga nga bwe buti:
+          🏥 : Okubuuza ku by'obulamu
+          🔍 : Noonya ku Database yo
+          ↗️ : Gezaako ekibuuzo eky'awamu`,
       nyn: `Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
-      sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?`,
+      sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?
+
+          Tumia vitufe vilivyo hapa chini kama ifuatavyo:
+            🏥 : Hoja ya Afya
+            🔍 : Tafuta Hifadhidata yako
+            ↗️ : Jaribu swali la jumla`,
+
+      am: `እንኳን ወደ ሕይወት ጤና፣ ${pname} በደህና መጡ። እንዴት መርዳት እችላለሁ?
+
+            ከዚህ በታች ያሉትን አዝራሮች እንደሚከተለው ተጠቀም።
+            🏥: ስለ ጤና ወይም ስለ መተግበሪያ ጥያቄ
+            🔍፡ ዳታቤዝህን ፈልግ
+            ↗️: አጠቃላይ ጥያቄን ይሞክሩ`,
+      hi: `लाइफ हेल्थ में आपका स्वागत है, ${pname}. मैं आपकी सहायता कैसे कर सकता हूँ?
+
+            नीचे दिए गए बटनों का उपयोग इस प्रकार करें:
+            🏥 : स्वास्थ्य या ऐप के बारे में प्रश्न
+            🔍 : अपना डेटाबेस खोजें
+            ↗️ : एक सामान्य प्रश्न आज़माएँ`,
+      ar: `مرحبًا بك في Life Health، ${pname}. كيف يمكنني المساعدة؟
+            استخدم الأزرار أدناه على النحو التالي:
+
+            🏥 : استعلام حول الصحة أو التطبيق
+            🔍 : ابحث في قاعدة البيانات الخاصة بك
+            ↗️ : جرّب سؤالاً عامًا`,
     };
     setMessages([
       {
         role: "bot",
         content:
           welcomeMessages[plang as keyof typeof welcomeMessages] ||
-          `Welcome to Life Health. How can I assist?`,
+          `Welcome to Life Health. How can I assist? 
+
+           Use the buttons below as follows:
+            🏥 : Query about health or the app 
+             🔍 : Search your Database
+             ↗️ : Try a general question
+          `,
       },
     ]);
     setLanguage(plang || "");
-  }, []);
+  }, [plang, pname]);
 
-  const pid = urlParams.get("id");
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    const userMessage = { role: "user", content: userInput };
+    setMessages([...messages, userMessage]);
+    setUserInput("");
+    await startInteract(
+      userInput,
+      userMessage,
+      userLanguage,
+      selectedEndpoint,
+      responser
+    );
+  };
+
   const startInteract = async (
     userInput: string,
     userMessage: { role: string; content: string },
     userLanguage: object,
-    pid: string | null
+    endpoint: string,
+    responser: string
   ) => {
     const optionsText: RequestInit = {
       method: "POST",
@@ -77,7 +157,7 @@ const App: React.FC = () => {
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 200,
+            max_new_tokens: 100,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -95,7 +175,7 @@ const App: React.FC = () => {
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 200,
+            max_new_tokens: 100,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -113,7 +193,7 @@ const App: React.FC = () => {
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 200,
+            max_new_tokens: 100,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -131,7 +211,7 @@ const App: React.FC = () => {
           inputs: [],
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 200,
+            max_new_tokens: 100,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -148,10 +228,11 @@ const App: React.FC = () => {
     };
 
     if (userInput) {
-      setLoading(true); // Show loader before making the API call
+      setLoading(true);
       try {
         const res = await fetch(
-          "https://gen-llm-service.1lvzmjbcniiy.us-south.codeengine.appdomain.cloud/watsonchat",
+          //`http://localhost:4050/${endpoint}`,
+          `https://gen-llm-service.1lvzmjbcniiy.us-south.codeengine.appdomain.cloud/${endpoint}`,
           optionsText
         );
         const data = await res.json();
@@ -159,7 +240,6 @@ const App: React.FC = () => {
         setLoading(false);
         console.log(data);
 
-        // Extract the answer from the chunks array
         let answer: string;
         if (data.response == "") {
           const plang = urlParams.get("lang");
@@ -174,11 +254,11 @@ const App: React.FC = () => {
 
           answer = replies[plang as keyof typeof replies] || replies.en;
         } else {
-          answer = data.response;
+          answer = data[responser];
+          console.log(answer);
           // answer = answer.replace(/\n?\s*(\d+)\./g, "\n$1.");
           // answer = formatResponse(data.response);
         }
-        // Update state with bot's message
         setMessages([
           ...messages,
           userMessage,
@@ -187,19 +267,8 @@ const App: React.FC = () => {
       } catch (error) {
         console.error(error);
         setLoading(false);
-        // Handle the error, e.g., display a user-friendly message to the user
       }
     }
-  };
-
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-
-    const userMessage = { role: "user", content: userInput };
-    setMessages([...messages, userMessage]);
-    setUserInput("");
-    // Call the fetch function
-    await startInteract(userInput, userMessage, userLanguage, pid);
   };
 
   useEffect(() => {
@@ -260,6 +329,7 @@ const App: React.FC = () => {
             ))}
           </div>
         ))}
+
         {loading && (
           <img
             src={imgSrc}
@@ -273,7 +343,25 @@ const App: React.FC = () => {
       {/* Send Messages*/}
       <div className="bg-rose-500 h-20 px-4 flex items-center gap-4 relative">
         <div className="flex w-full gap-6">
-          <form onSubmit={handleSubmit} className="flex w-full gap-6">
+          <form onSubmit={handleSubmit} className="flex w-full gap-3">
+            <button
+              type="submit"
+              onClick={() => {
+                setSelectedEndpoint("queryLLM");
+                setResponser("llm_response");
+              }}
+            >
+              <MdOutlineHealthAndSafety />
+            </button>
+            <button
+              type="submit"
+              onClick={() => {
+                setSelectedEndpoint("watsonchat");
+                setResponser("response");
+              }}
+            >
+              <RiSearch2Line />
+            </button>
             <input
               type="text"
               placeholder="Type a message"
@@ -287,11 +375,15 @@ const App: React.FC = () => {
                   <MdSend
                     className="text-gray-400 cursor-pointer text-xl"
                     title="Talk to Us!"
+                    onClick={() => {
+                      setSelectedEndpoint("queryLLM");
+                      setResponser("llm_response");
+                    }}
                   />
                 ) : (
                   <FaMicrophone
                     className="text-gray-400 cursor-pointer text-xl"
-                    onClick={(e: any) => {
+                    onClick={(e) => {
                       e.preventDefault();
                     }}
                   />
