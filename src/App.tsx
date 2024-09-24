@@ -1,6 +1,5 @@
 import React, { useState, FormEvent, useRef, useEffect } from "react";
 import "./App.css";
-import { FaMicrophone } from "react-icons/fa";
 import { MdOutlineHealthAndSafety, MdSend } from "react-icons/md";
 import { RiSearch2Line } from "react-icons/ri";
 
@@ -371,7 +370,15 @@ const App: React.FC = () => {
             />
             <div className="flex w-10 items-center justify-center">
               <button type="submit">
-                {userInput.length ? (
+                <MdSend
+                  className="text-gray-400 cursor-pointer text-xl"
+                  title="Talk to Us!"
+                  onClick={() => {
+                    setSelectedEndpoint("queryLLM");
+                    setResponser("llm_response");
+                  }}
+                />
+                {/* {userInput.length ? (
                   <MdSend
                     className="text-gray-400 cursor-pointer text-xl"
                     title="Talk to Us!"
@@ -381,13 +388,9 @@ const App: React.FC = () => {
                     }}
                   />
                 ) : (
-                  <FaMicrophone
-                    className="text-gray-400 cursor-pointer text-xl"
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                  />
-                )}
+                  <div></div>
+                  //<STT />
+                )} */}
               </button>
             </div>
           </form>
