@@ -102,9 +102,10 @@ const App: React.FC = () => {
           `Welcome to Life Health. How can I assist? 
 
            Use the buttons below as follows:
-            🏥 : Query about health or the app 
+             🏥 : Query about health or the app 
              🔍 : Search your Database
-             ↗️ : Try a general question
+              => : Try a general question
+
           `,
       },
     ]);
@@ -349,24 +350,6 @@ const App: React.FC = () => {
             onSubmit={handleSubmit}
             className="flex w-full  gap-x-2 space-x-1"
           >
-            <button className="p-1 left-0 bg-rose-500" type="submit">
-              <MdOutlineHealthAndSafety
-                color="black"
-                onClick={() => {
-                  setSelectedEndpoint("queryLLM");
-                  setResponser("llm_response");
-                }}
-              />
-            </button>
-            <button className="p-1 bg-rose-500" type="submit">
-              <RiSearch2Line
-                color="black"
-                onClick={() => {
-                  setSelectedEndpoint("watsonchat");
-                  setResponser("response");
-                }}
-              />
-            </button>
             <div className="relative w-full">
               <input
                 type="text"
@@ -375,19 +358,36 @@ const App: React.FC = () => {
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
               />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 ">
-                <button className="p-1 bg-transparent" type="submit">
-                  <MdSend
-                    className=" text-gray-400 cursor-pointer text-xl"
-                    title="Talk to Us!"
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 space-x-3 ">
+                <button className="p-1 left-0 bg-transparent" type="submit">
+                  <MdOutlineHealthAndSafety
                     onClick={() => {
                       setSelectedEndpoint("queryLLM");
                       setResponser("llm_response");
                     }}
                   />
                 </button>
+                <button className="p-1 bg-transparent" type="submit">
+                  <RiSearch2Line
+                    onClick={() => {
+                      setSelectedEndpoint("watsonchat");
+                      setResponser("response");
+                    }}
+                  />
+                </button>
               </div>
             </div>
+            <button className="p-1 bg-transparent" type="submit">
+              <MdSend
+                color="black"
+                className=" text-gray-400 cursor-pointer text-xl"
+                title="Talk to Us!"
+                onClick={() => {
+                  setSelectedEndpoint("queryLLM");
+                  setResponser("llm_response");
+                }}
+              />
+            </button>
           </form>
         </div>
       </div>
