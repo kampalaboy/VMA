@@ -323,9 +323,15 @@ const App: React.FC = () => {
             key={index}
             className={`${
               message.role === "bot"
-                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] lg:max-w-[600px] max-w-[350px]"
-                : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] lg:max-w-[300px] max-w-[150px] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
+                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] max-w-fit "
+                : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] max-w-fit self-end lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
             }`}
+            style={{
+              width: "auto",
+              maxWidth: "300px",
+              wordBreak: "break-word",
+              // whiteSpace: "pre-wrap",
+            }}
           >
             {message.content.split("\n").map((line, i) => (
               <React.Fragment key={i}>
