@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imgSrc, setImgSrc] = useState<string>("");
   const [language, setLanguage] = useState("");
-
+  const [id, setId] = useState<string | null>("");
   const userLanguage = {
     en: "English",
     fr: "French",
@@ -31,7 +31,11 @@ const App: React.FC = () => {
   const urlParams = new URLSearchParams(params);
   const pname = urlParams.get("name") || "";
   const plang = urlParams.get("lang");
+
   const pid = urlParams.get("id");
+  useEffect(() => {
+    setId(pid);
+  }, [pid]);
 
   useEffect(() => {
     const welcomeMessages = {
@@ -40,59 +44,59 @@ const App: React.FC = () => {
           Use the buttons below as follows:
                 🏥 : Query about health or the app 
                 🔍 : Search your Database
-                ↗️ : Try a general question`,
+                => : Try a general question`,
       fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider?
 
           Utilisez les boutons ci-dessous comme suit:
-              🏥: Requête sur la santé
-              🔍: Rechercher dans votre base de données
-              ↗️: Essayer une question générale`,
+              🏥 : Requête sur la santé
+              🔍 : Rechercher dans votre base de données
+              => : Essayer une question générale`,
 
       es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?
       
           Utilice los botones siguientes de la siguiente manera:
-                🏥: Consulta de salud
-                🔍: Busca en tu base de datos
-                ↗️: Prueba una pregunta general
+                🏥 : Consulta de salud
+                🔍 : Busca en tu base de datos
+                => : Prueba una pregunta general
           `,
       pt: `Bem-vindo à Life Health, ${pname}. Como posso ajudar?
 
             Utilize os botões abaixo da seguinte forma:
-            🏥: Consulta sobre saúde ou aplicação
-            🔍: Pesquise a sua base de dados
-            ↗️: Tente uma pergunta geral`,
+            🏥 : Consulta sobre saúde ou aplicação
+            🔍 : Pesquise a sua base de dados
+            => : Tente uma pergunta geral`,
       lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?
 
                 Kozesa obutambi buno wammanga nga bwe buti:
           🏥 : Okubuuza ku by'obulamu
           🔍 : Noonya ku Database yo
-          ↗️ : Gezaako ekibuuzo eky'awamu`,
+          => : Gezaako ekibuuzo eky'awamu`,
       nyn: `Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
       sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?
 
           Tumia vitufe vilivyo hapa chini kama ifuatavyo:
             🏥 : Hoja ya Afya
             🔍 : Tafuta Hifadhidata yako
-            ↗️ : Jaribu swali la jumla`,
+            => : Jaribu swali la jumla`,
 
       am: `እንኳን ወደ ሕይወት ጤና፣ ${pname} በደህና መጡ። እንዴት መርዳት እችላለሁ?
 
             ከዚህ በታች ያሉትን አዝራሮች እንደሚከተለው ተጠቀም።
-            🏥: ስለ ጤና ወይም ስለ መተግበሪያ ጥያቄ
-            🔍፡ ዳታቤዝህን ፈልግ
-            ↗️: አጠቃላይ ጥያቄን ይሞክሩ`,
+            🏥 : ስለ ጤና ወይም ስለ መተግበሪያ ጥያቄ
+            🔍 ፡ ዳታቤዝህን ፈልግ
+            => : አጠቃላይ ጥያቄን ይሞክሩ`,
       hi: `लाइफ हेल्थ में आपका स्वागत है, ${pname}. मैं आपकी सहायता कैसे कर सकता हूँ?
 
             नीचे दिए गए बटनों का उपयोग इस प्रकार करें:
             🏥 : स्वास्थ्य या ऐप के बारे में प्रश्न
             🔍 : अपना डेटाबेस खोजें
-            ↗️ : एक सामान्य प्रश्न आज़माएँ`,
+            => : एक सामान्य प्रश्न आज़माएँ`,
       ar: `مرحبًا بك في Life Health، ${pname}. كيف يمكنني المساعدة؟
             استخدم الأزرار أدناه على النحو التالي:
 
             🏥 : استعلام حول الصحة أو التطبيق
             🔍 : ابحث في قاعدة البيانات الخاصة بك
-            ↗️ : جرّب سؤالاً عامًا`,
+            => : جرّب سؤالاً عامًا`,
     };
     setMessages([
       {
@@ -103,7 +107,6 @@ const App: React.FC = () => {
 
            Use the buttons below as follows:
              🏥 : Query about health or the app 
-             🔍 : Search your Database
               => : Try a general question
 
           `,
@@ -350,42 +353,52 @@ const App: React.FC = () => {
             onSubmit={handleSubmit}
             className="flex w-full  gap-x-2 space-x-1"
           >
-            <div className="relative w-full">
+            <div className="relative w-full gap-x-2">
               <input
+                id="inputBot"
                 type="text"
                 placeholder="Type a message"
-                className="text-sm focus:outline-none h-10 rounded-lg px-5 py-4 w-full"
+                className="text-sm focus:outline-none h-10 rounded-lg px-5 py-4 w-full pr-24"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 space-x-3 ">
-                <button className="p-1 left-0 bg-transparent" type="submit">
-                  <MdOutlineHealthAndSafety
-                    onClick={() => {
-                      setSelectedEndpoint("queryLLM");
-                      setResponser("llm_response");
-                    }}
-                  />
+                <button
+                  className="p-1 left-0 bg-transparent"
+                  type="submit"
+                  onClick={() => {
+                    setSelectedEndpoint("queryLLM");
+                    setResponser("llm_response");
+                  }}
+                >
+                  <MdOutlineHealthAndSafety size={23} />
                 </button>
-                <button className="p-1 bg-transparent" type="submit">
-                  <RiSearch2Line
+                {id && (
+                  <button
+                    className="p-1 bg-transparent"
+                    type="submit"
                     onClick={() => {
                       setSelectedEndpoint("watsonchat");
                       setResponser("response");
                     }}
-                  />
-                </button>
+                  >
+                    <RiSearch2Line size={23} />
+                  </button>
+                )}
               </div>
             </div>
-            <button className="p-1 bg-transparent" type="submit">
+            <button
+              className="p-1 bg-transparent"
+              type="submit"
+              onClick={() => {
+                setSelectedEndpoint("queryLLM");
+                setResponser("llm_response");
+              }}
+            >
               <MdSend
                 color="black"
                 className=" text-gray-400 cursor-pointer text-xl"
                 title="Talk to Us!"
-                onClick={() => {
-                  setSelectedEndpoint("queryLLM");
-                  setResponser("llm_response");
-                }}
               />
             </button>
           </form>
