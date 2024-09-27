@@ -8,12 +8,12 @@ const App: React.FC = () => {
     []
   );
   const [userInput, setUserInput] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>("");
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
   const [responser, setResponser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [imgSrc, setImgSrc] = useState<string>("");
   const [language, setLanguage] = useState("");
-  const [id, setId] = useState<string | null>("");
   const userLanguage = {
     en: "English",
     fr: "French",
@@ -34,7 +34,7 @@ const App: React.FC = () => {
 
   const pid = urlParams.get("id");
   useEffect(() => {
-    setId(pid);
+    setUserId(pid);
   }, [pid]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const App: React.FC = () => {
       
           Use the buttons below as follows:
                 🏥 : Query about health or the app ${
-                  id
+                  userId
                     ? `
                 🔍 : Search your Database`
                     : ""
@@ -53,7 +53,7 @@ const App: React.FC = () => {
 
           Utilisez les boutons ci-dessous comme suit:
               🏥 : Requête sur la santé ${
-                id
+                userId
                   ? `
              🔍 : Rechercher dans votre base de données`
                   : ""
@@ -64,7 +64,7 @@ const App: React.FC = () => {
       
           Utilice los botones siguientes de la siguiente manera:
                 🏥 : Consulta de salud ${
-                  id
+                  userId
                     ? ` 
                 🔍 : Busca en tu base de datos`
                     : ""
@@ -75,7 +75,7 @@ const App: React.FC = () => {
 
             Utilize os botões abaixo da seguinte forma:
             🏥 : Consulta sobre saúde ou aplicação ${
-              id
+              userId
                 ? ` 
            🔍 : Pesquise a sua base de dados`
                 : ""
@@ -85,7 +85,7 @@ const App: React.FC = () => {
 
                 Kozesa obutambi buno wammanga nga bwe buti:
           🏥 : Okubuuza ku by'obulamu ${
-            id
+            userId
               ? ` 
          🔍 : Noonya ku Database yo`
               : ""
@@ -96,7 +96,7 @@ const App: React.FC = () => {
 
           Tumia vitufe vilivyo hapa chini kama ifuatavyo:
             🏥 : Hoja ya Afya ${
-              id
+              userId
                 ? ` 
             🔍 : Tafuta Hifadhidata yako`
                 : ""
@@ -107,7 +107,7 @@ const App: React.FC = () => {
 
             ከዚህ በታች ያሉትን አዝራሮች እንደሚከተለው ተጠቀም።
             🏥 : ስለ ጤና ወይም ስለ መተግበሪያ ጥያቄ ${
-              id
+              userId
                 ? ` 
             🔍 ፡ ዳታቤዝህን ፈልግ`
                 : ""
@@ -117,7 +117,7 @@ const App: React.FC = () => {
 
             नीचे दिए गए बटनों का उपयोग इस प्रकार करें:
             🏥 : स्वास्थ्य या ऐप के बारे में प्रश्न ${
-              id
+              userId
                 ? ` 
            🔍 : अपना डेटाबेस खोजें`
                 : ""
@@ -127,7 +127,7 @@ const App: React.FC = () => {
             استخدم الأزرار أدناه على النحو التالي:
 
             🏥 : استعلام حول الصحة أو التطبيق ${
-              id
+              userId
                 ? `
              🔍 : ابحث في قاعدة البيانات الخاصة بك`
                 : ""
@@ -148,7 +148,7 @@ const App: React.FC = () => {
       },
     ]);
     setLanguage(plang || "");
-  }, [plang, pname, id]);
+  }, [plang, pname, userId]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -411,7 +411,7 @@ const App: React.FC = () => {
                 >
                   <MdOutlineHealthAndSafety size={23} />
                 </button>
-                {id && (
+                {userId && (
                   <button
                     className="rounded-full p-1 bg-transparent"
                     type="submit"
@@ -436,7 +436,6 @@ const App: React.FC = () => {
               <MdSend
                 color="black"
                 className=" text-gray-400 cursor-pointer text-xl"
-                title="Talk to Us!"
               />
             </button>
           </form>
