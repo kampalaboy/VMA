@@ -42,60 +42,96 @@ const App: React.FC = () => {
       en: `Welcome to Life Health, ${pname}.  How can I assist?
       
           Use the buttons below as follows:
-                🏥 : Query about health or the app 
-                🔍 : Search your Database
+                🏥 : Query about health or the app ${
+                  id
+                    ? `
+                🔍 : Search your Database`
+                    : ""
+                }
                 => : Try a general question`,
       fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider?
 
           Utilisez les boutons ci-dessous comme suit:
-              🏥 : Requête sur la santé
-              🔍 : Rechercher dans votre base de données
+              🏥 : Requête sur la santé ${
+                id
+                  ? `
+             🔍 : Rechercher dans votre base de données`
+                  : ""
+              }
               => : Essayer une question générale`,
 
       es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?
       
           Utilice los botones siguientes de la siguiente manera:
-                🏥 : Consulta de salud
-                🔍 : Busca en tu base de datos
+                🏥 : Consulta de salud ${
+                  id
+                    ? ` 
+                🔍 : Busca en tu base de datos`
+                    : ""
+                }
                 => : Prueba una pregunta general
           `,
       pt: `Bem-vindo à Life Health, ${pname}. Como posso ajudar?
 
             Utilize os botões abaixo da seguinte forma:
-            🏥 : Consulta sobre saúde ou aplicação
-            🔍 : Pesquise a sua base de dados
+            🏥 : Consulta sobre saúde ou aplicação ${
+              id
+                ? ` 
+           🔍 : Pesquise a sua base de dados`
+                : ""
+            }
             => : Tente uma pergunta geral`,
       lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?
 
                 Kozesa obutambi buno wammanga nga bwe buti:
-          🏥 : Okubuuza ku by'obulamu
-          🔍 : Noonya ku Database yo
+          🏥 : Okubuuza ku by'obulamu ${
+            id
+              ? ` 
+         🔍 : Noonya ku Database yo`
+              : ""
+          }
           => : Gezaako ekibuuzo eky'awamu`,
       nyn: `Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
       sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?
 
           Tumia vitufe vilivyo hapa chini kama ifuatavyo:
-            🏥 : Hoja ya Afya
-            🔍 : Tafuta Hifadhidata yako
+            🏥 : Hoja ya Afya ${
+              id
+                ? ` 
+            🔍 : Tafuta Hifadhidata yako`
+                : ""
+            }
             => : Jaribu swali la jumla`,
 
       am: `እንኳን ወደ ሕይወት ጤና፣ ${pname} በደህና መጡ። እንዴት መርዳት እችላለሁ?
 
             ከዚህ በታች ያሉትን አዝራሮች እንደሚከተለው ተጠቀም።
-            🏥 : ስለ ጤና ወይም ስለ መተግበሪያ ጥያቄ
-            🔍 ፡ ዳታቤዝህን ፈልግ
+            🏥 : ስለ ጤና ወይም ስለ መተግበሪያ ጥያቄ ${
+              id
+                ? ` 
+            🔍 ፡ ዳታቤዝህን ፈልግ`
+                : ""
+            }
             => : አጠቃላይ ጥያቄን ይሞክሩ`,
       hi: `लाइफ हेल्थ में आपका स्वागत है, ${pname}. मैं आपकी सहायता कैसे कर सकता हूँ?
 
             नीचे दिए गए बटनों का उपयोग इस प्रकार करें:
-            🏥 : स्वास्थ्य या ऐप के बारे में प्रश्न
-            🔍 : अपना डेटाबेस खोजें
+            🏥 : स्वास्थ्य या ऐप के बारे में प्रश्न ${
+              id
+                ? ` 
+           🔍 : अपना डेटाबेस खोजें`
+                : ""
+            }
             => : एक सामान्य प्रश्न आज़माएँ`,
       ar: `مرحبًا بك في Life Health، ${pname}. كيف يمكنني المساعدة؟
             استخدم الأزرار أدناه على النحو التالي:
 
-            🏥 : استعلام حول الصحة أو التطبيق
-            🔍 : ابحث في قاعدة البيانات الخاصة بك
+            🏥 : استعلام حول الصحة أو التطبيق ${
+              id
+                ? `
+             🔍 : ابحث في قاعدة البيانات الخاصة بك`
+                : ""
+            }
             => : جرّب سؤالاً عامًا`,
     };
     setMessages([
@@ -113,7 +149,7 @@ const App: React.FC = () => {
       },
     ]);
     setLanguage(plang || "");
-  }, [plang, pname]);
+  }, [plang, pname, id]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -236,7 +272,6 @@ const App: React.FC = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          //`http://localhost:4050/${endpoint}`,
           `https://gen-llm-service.1lvzmjbcniiy.us-south.codeengine.appdomain.cloud/${endpoint}`,
           optionsText
         );
@@ -368,7 +403,7 @@ const App: React.FC = () => {
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 space-x-3 ">
                 <button
-                  className="p-1 left-0 bg-transparent"
+                  className="rounded-full p-1 left-0 bg-transparent"
                   type="submit"
                   onClick={() => {
                     setSelectedEndpoint("queryLLM");
@@ -379,7 +414,7 @@ const App: React.FC = () => {
                 </button>
                 {id && (
                   <button
-                    className="p-1 bg-transparent"
+                    className="rounded-full p-1 bg-transparent"
                     type="submit"
                     onClick={() => {
                       setSelectedEndpoint("watsonchat");
@@ -392,7 +427,7 @@ const App: React.FC = () => {
               </div>
             </div>
             <button
-              className="p-1 bg-transparent"
+              className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
                 setSelectedEndpoint("queryLLM");
