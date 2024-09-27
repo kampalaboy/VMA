@@ -201,7 +201,7 @@ const App: React.FC = () => {
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
-              hap_output: "truehttp://localhost:5173/?name=Kwame&lang=en&id=1",
+              hap_output: "true",
               threshold: 0.75,
             },
             repetition_penalty: 1.1,
@@ -357,7 +357,7 @@ const App: React.FC = () => {
             key={index}
             className={`${
               message.role === "bot"
-                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] max-w-[300px] break-words "
+                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] max-w-[300px]"
                 : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] break-words max-w-fit self-end lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
             }`}
             style={{
