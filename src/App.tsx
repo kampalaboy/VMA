@@ -144,7 +144,6 @@ const App: React.FC = () => {
            Use the buttons below as follows:
              🏥 : Query about health or the app 
               => : Try a general question
-
           `,
       },
     ]);
