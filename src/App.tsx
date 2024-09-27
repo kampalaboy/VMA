@@ -296,8 +296,6 @@ const App: React.FC = () => {
         } else {
           answer = data[responser];
           console.log(answer);
-          // answer = answer.replace(/\n?\s*(\d+)\./g, "\n$1.");
-          // answer = formatResponse(data.response);
         }
         setMessages([
           ...messages,
@@ -305,6 +303,11 @@ const App: React.FC = () => {
           { role: "bot", content: answer.trim() },
         ]);
       } catch (error) {
+        setMessages([
+          ...messages,
+          userMessage,
+          { role: "bot", content: "Something went wrong." },
+        ]);
         console.error(error);
         setLoading(false);
       }
