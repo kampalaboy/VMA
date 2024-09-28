@@ -421,7 +421,7 @@ const App: React.FC = () => {
                     className="rounded-full p-1 bg-transparent"
                     type="submit"
                     onClick={() => {
-                      setSelectedEndpoint("watsonchat");
+                      setSelectedEndpoint("texttoxql");
                       setResponser("response");
                     }}
                   >
