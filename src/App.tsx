@@ -13,19 +13,6 @@ const App: React.FC = () => {
   const [responser, setResponser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [imgSrc, setImgSrc] = useState<string>("");
-  const [language, setLanguage] = useState("");
-  const userLanguage = {
-    en: "English",
-    fr: "French",
-    es: "Spanish",
-    pt: "Portuguese",
-    lg: "Luganda",
-    nyn: "Runyankole",
-    sw: "Swahili",
-    am: "Amharic",
-    hi: "Hindi",
-    ar: "Arabic",
-  };
 
   const params = window.location.search;
   const urlParams = new URLSearchParams(params);
@@ -147,7 +134,6 @@ const App: React.FC = () => {
           `,
       },
     ]);
-    setLanguage(plang || "");
   }, [plang, pname, userId]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -158,19 +144,31 @@ const App: React.FC = () => {
     const userMessage = { role: "user", content: userInput };
     setMessages([...messages, userMessage]);
     setUserInput("");
-    await startInteract(
-      userInput,
-      userMessage,
-      userLanguage,
-      selectedEndpoint,
-      responser
-    );
+    await startInteract(userInput, userMessage, selectedEndpoint, responser);
   };
+  const inputElement = document.getElementById("inputBot");
+  const buttonId = document.getElementById("generalQuery");
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && buttonId) {
+        e.preventDefault();
+        buttonId.click();
+      }
+    };
+
+    if (inputElement) {
+      inputElement.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        inputElement.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [inputElement, buttonId]);
 
   const startInteract = async (
     userInput: string,
     userMessage: { role: string; content: string },
-    userLanguage: object,
     endpoint: string,
     responser: string
   ) => {
@@ -185,7 +183,6 @@ const App: React.FC = () => {
       body: JSON.stringify({
         question: userInput,
         dbtype: "MYSQL",
-        rag_llm_instructions: `Reply to ${userInput} in the ${userLanguage} determined by the parameter ${language}`,
         es_index_name: "health-docs-index",
         user_id: pid,
         es_index_text_field: "body_content_field",
@@ -367,7 +364,6 @@ const App: React.FC = () => {
             }`}
             style={{
               wordBreak: "break-word",
-              // whiteSpace: "pre-wrap",
             }}
           >
             {message.content.split("\n").map((line, i) => (
@@ -407,6 +403,7 @@ const App: React.FC = () => {
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 space-x-3 ">
                 <button
+                  id="healthQuery"
                   className="rounded-full p-1 left-0 bg-transparent"
                   type="submit"
                   onClick={() => {
@@ -418,6 +415,7 @@ const App: React.FC = () => {
                 </button>
                 {userId && (
                   <button
+                    id="dbQuery"
                     className="rounded-full p-1 bg-transparent"
                     type="submit"
                     onClick={() => {
@@ -431,10 +429,11 @@ const App: React.FC = () => {
               </div>
             </div>
             <button
+              id="generalQuery"
               className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
-                setSelectedEndpoint("queryLLM");
+                setSelectedEndpoint("general");
                 setResponser("llm_response");
               }}
             >
