@@ -8,7 +8,7 @@ const App: React.FC = () => {
     []
   );
   const [userInput, setUserInput] = useState<string>("");
-  const [userId, setUserId] = useState<string | null>("");
+  const [userId, setUserId] = useState<string>("");
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
   const [responser, setResponser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,7 +19,7 @@ const App: React.FC = () => {
   const pname = urlParams.get("name") || "";
   const plang = urlParams.get("lang");
 
-  const pid = urlParams.get("id");
+  const pid = urlParams.get("id") || "";
   useEffect(() => {
     setUserId(pid);
   }, [pid]);
@@ -192,6 +192,7 @@ const App: React.FC = () => {
         sqlllm_params: {
           model_id: "ibm/granite-13b-instruct-v2",
           inputs: [],
+          user_id: pid,
           parameters: {
             decoding_method: "greedy",
             max_new_tokens: 100,
@@ -419,7 +420,7 @@ const App: React.FC = () => {
                     className="rounded-full p-1 bg-transparent"
                     type="submit"
                     onClick={() => {
-                      setSelectedEndpoint("texttoxql");
+                      setSelectedEndpoint("watsonchat");
                       setResponser("response");
                     }}
                   >
