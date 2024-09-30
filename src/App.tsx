@@ -27,98 +27,34 @@ const App: React.FC = () => {
   useEffect(() => {
     const welcomeMessages = {
       en: `Welcome to Life Health, ${pname}.  How can I assist?
-      
-          ${
-            userId
-              ? `
-                🔍 : Search your Database`
-              : ""
-          }
-                `,
+            ${userId ? `🔍 : Search your Database` : ""}
+          `,
       fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider?
-
-          Utilisez les boutons ci-dessous comme suit:
-              🏥 : Requête sur la santé ${
-                userId
-                  ? `
-             🔍 : Rechercher dans votre base de données`
-                  : ""
-              }
-              => : Essayer une question générale`,
+            ${userId ? `🔍 : Rechercher dans votre base de données` : ""}
+          `,
 
       es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?
-      
-          Utilice los botones siguientes de la siguiente manera:
-                🏥 : Consulta de salud ${
-                  userId
-                    ? ` 
-                🔍 : Busca en tu base de datos`
-                    : ""
-                }
-                => : Prueba una pregunta general
+            ${userId ? ` 🔍 : Busca en tu base de datos` : ""}
           `,
       pt: `Bem-vindo à Life Health, ${pname}. Como posso ajudar?
-
-            Utilize os botões abaixo da seguinte forma:
-            🏥 : Consulta sobre saúde ou aplicação ${
-              userId
-                ? ` 
-           🔍 : Pesquise a sua base de dados`
-                : ""
-            }
-            => : Tente uma pergunta geral`,
+            ${userId ? ` 🔍 : Pesquise a sua base de dados` : ""}
+          `,
       lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?
-
-                Kozesa obutambi buno wammanga nga bwe buti:
-          🏥 : Okubuuza ku by'obulamu ${
-            userId
-              ? ` 
-         🔍 : Noonya ku Database yo`
-              : ""
-          }
-          => : Gezaako ekibuuzo eky'awamu`,
+            ${userId ? ` 🔍 : Noonya ku Database yo` : ""}
+          `,
       nyn: `Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
       sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?
-
-          Tumia vitufe vilivyo hapa chini kama ifuatavyo:
-            🏥 : Hoja ya Afya ${
-              userId
-                ? ` 
-            🔍 : Tafuta Hifadhidata yako`
-                : ""
-            }
-            => : Jaribu swali la jumla`,
-
+            ${userId ? ` 🔍 : Tafuta Hifadhidata yako` : ""}       
+            `,
       am: `እንኳን ወደ ሕይወት ጤና፣ ${pname} በደህና መጡ። እንዴት መርዳት እችላለሁ?
-
-            ከዚህ በታች ያሉትን አዝራሮች እንደሚከተለው ተጠቀም።
-            🏥 : ስለ ጤና ወይም ስለ መተግበሪያ ጥያቄ ${
-              userId
-                ? ` 
-            🔍 ፡ ዳታቤዝህን ፈልግ`
-                : ""
-            }
-            => : አጠቃላይ ጥያቄን ይሞክሩ`,
+          ${userId ? `🔍 ፡ ዳታቤዝህን ፈልግ` : ""}
+            `,
       hi: `लाइफ हेल्थ में आपका स्वागत है, ${pname}. मैं आपकी सहायता कैसे कर सकता हूँ?
-
-            नीचे दिए गए बटनों का उपयोग इस प्रकार करें:
-            🏥 : स्वास्थ्य या ऐप के बारे में प्रश्न ${
-              userId
-                ? ` 
-           🔍 : अपना डेटाबेस खोजें`
-                : ""
-            }
-            => : एक सामान्य प्रश्न आज़माएँ`,
+          ${userId ? `🔍 : अपना डेटाबेस खोजें` : ""}
+            `,
       ar: `مرحبًا بك في Life Health، ${pname}. كيف يمكنني المساعدة؟
-            استخدم الأزرار أدناه على النحو التالي:
-
-            🏥 : استعلام حول الصحة أو التطبيق ${
-              userId
-                ? `
-             🔍 : ابحث في قاعدة البيانات الخاصة بك`
-                : ""
-            }
-            => : جرّب سؤالاً عامًا`,
+          ${userId ? ` 🔍 : ابحث في قاعدة البيانات الخاصة بك` : ""}
+            `,
     };
     setMessages([
       {
