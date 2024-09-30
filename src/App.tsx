@@ -433,7 +433,7 @@ const App: React.FC = () => {
               className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
-                setSelectedEndpoint("general");
+                setSelectedEndpoint("queryLLM");
                 setResponser("llm_response");
               }}
             >
