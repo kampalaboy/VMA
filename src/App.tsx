@@ -196,12 +196,13 @@ const App: React.FC = () => {
         if (data.response == "") {
           const plang = urlParams.get("lang");
           const replies = {
-            en: "Sorry, say that again.",
-            fr: "Désolé, répétez-le.",
-            es: "Lo siento, dilo de nuevo.",
-            lg: "Bambi, sikutegede ddamu okwogera ekyo.",
+            en: "Sorry, I could not find what you were looking for.",
+            fr: "Désolé, je n'ai pas trouvé ce que vous cherchiez.",
+            es: "Lo siento, no pude encontrar lo que buscabas.",
+            pt: "Desculpe, não consegui encontrar o que procurava",
+            lg: "Bambi, Ssisobodde kufuna ekyo kyo'nonya.",
             nyn: "Ihangane, ongera ubivuge.",
-            sw: "Samahani, sema hivyo tena.",
+            sw: "Samahani, sikuweza kupata ulichokuwa unatafuta.",
           };
 
           answer = replies[plang as keyof typeof replies] || replies.en;
