@@ -28,14 +28,13 @@ const App: React.FC = () => {
     const welcomeMessages = {
       en: `Welcome to Life Health, ${pname}.  How can I assist?
       
-          Use the buttons below as follows:
-                🏥 : Query about health or the app ${
-                  userId
-                    ? `
+          ${
+            userId
+              ? `
                 🔍 : Search your Database`
-                    : ""
-                }
-                => : Try a general question`,
+              : ""
+          }
+                `,
       fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider?
 
           Utilisez les boutons ci-dessous comme suit:
@@ -127,10 +126,6 @@ const App: React.FC = () => {
         content:
           welcomeMessages[plang as keyof typeof welcomeMessages] ||
           `Welcome to Life Health. How can I assist? 
-
-           Use the buttons below as follows:
-             🏥 : Query about health or the app 
-              => : Try a general question
           `,
       },
     ]);
@@ -403,17 +398,6 @@ const App: React.FC = () => {
                 onChange={(e) => setUserInput(e.target.value)}
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 space-x-3 ">
-                <button
-                  id="healthQuery"
-                  className="rounded-full p-1 left-0 bg-transparent"
-                  type="submit"
-                  onClick={() => {
-                    setSelectedEndpoint("queryLLM");
-                    setResponser("llm_response");
-                  }}
-                >
-                  <MdOutlineHealthAndSafety size={23} />
-                </button>
                 {userId && (
                   <button
                     id="dbQuery"
@@ -434,8 +418,8 @@ const App: React.FC = () => {
               className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
-                setSelectedEndpoint("watsonchat");
-                setResponser("response");
+                setSelectedEndpoint("queryLLM");
+                setResponser("llm_response");
               }}
             >
               <MdSend
