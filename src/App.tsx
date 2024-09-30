@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
-import { MdOutlineHealthAndSafety, MdSend } from "react-icons/md";
+import { MdSend } from "react-icons/md";
 import { RiSearch2Line } from "react-icons/ri";
 
 const App: React.FC = () => {
