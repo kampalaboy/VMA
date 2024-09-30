@@ -77,25 +77,6 @@ const App: React.FC = () => {
     setUserInput("");
     await startInteract(userInput, userMessage, selectedEndpoint, responser);
   };
-  const inputElement = document.getElementById("inputBot");
-  const buttonId = document.getElementById("generalQuery");
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter" && buttonId) {
-        e.preventDefault();
-        buttonId.click();
-      }
-    };
-
-    if (inputElement) {
-      inputElement.addEventListener("keydown", handleKeyDown);
-
-      return () => {
-        inputElement.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-  }, [inputElement, buttonId]);
 
   const startInteract = async (
     userInput: string,
