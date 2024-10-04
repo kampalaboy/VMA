@@ -333,8 +333,8 @@ const App: React.FC = () => {
               className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
-                setSelectedEndpoint("watsonchat");
-                setResponser("response");
+                setSelectedEndpoint("queryLLM");
+                setResponser("llm_response");
               }}
             >
               <MdSend
