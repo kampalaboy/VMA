@@ -61,8 +61,7 @@ const App: React.FC = () => {
         role: "bot",
         content:
           welcomeMessages[plang as keyof typeof welcomeMessages] ||
-          `Welcome to Life Health. How can I assist? 
-          `,
+          `Welcome to Life Health. How can I assist?`,
       },
     ]);
   }, [plang, pname, userId]);
@@ -155,8 +154,6 @@ const App: React.FC = () => {
             top_k: 50,
             top_p: 1,
           },
-          ...messages,
-          userMessage,
         },
         generalllm_params: {
           model_id: "ibm/granite-13b-instruct-v2",
@@ -197,12 +194,12 @@ const App: React.FC = () => {
           const plang = urlParams.get("lang");
           const replies = {
             en: "Sorry, I could not find what you were looking for.",
-            fr: "Désolé, je n'ai pas trouvé ce que vous cherchiez.",
+            fr: "Désolé, je n'ai pas trsouvé ce que vous cherchiez.",
             es: "Lo siento, no pude encontrar lo que buscabas.",
             pt: "Desculpe, não consegui encontrar o que procurava",
             lg: "Bambi, Ssisobodde kufuna ekyo kyo'nonya.",
             nyn: "Ihangane, ongera ubivuge.",
-            sw: "Samahani, sikuweza kupata ulichokuwa unatafuta.",
+            sw: "Samahani, siwezi kupata ulichokuwa unatafuta.",
           };
 
           answer = replies[plang as keyof typeof replies] || replies.en;
@@ -336,8 +333,8 @@ const App: React.FC = () => {
               className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
-                setSelectedEndpoint("queryLLM");
-                setResponser("llm_response");
+                setSelectedEndpoint("watsonchat");
+                setResponser("response");
               }}
             >
               <MdSend
