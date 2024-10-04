@@ -101,7 +101,7 @@ const App: React.FC = () => {
         es_model_text_field: "ml.tokens",
         num_results: "3",
         sqlllm_params: {
-          model_id: "ibm/granite-13b-instruct-v2",
+          model_id: "meta-llama/llama-3-70b-instruct",
           inputs: [],
           user_id: pid,
           parameters: {
@@ -120,7 +120,7 @@ const App: React.FC = () => {
           },
         },
         classifyllm_params: {
-          model_id: "ibm/granite-13b-instruct-v2",
+          model_id: "meta-llama/llama-3-70b-instruct",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -138,7 +138,7 @@ const App: React.FC = () => {
           },
         },
         ragllm_params: {
-          model_id: "ibm/granite-13b-instruct-v2",
+          model_id: "meta-llama/llama-3-70b-instruct",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -156,7 +156,7 @@ const App: React.FC = () => {
           },
         },
         generalllm_params: {
-          model_id: "ibm/granite-13b-instruct-v2",
+          model_id: "meta-llama/llama-3-70b-instruct",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
