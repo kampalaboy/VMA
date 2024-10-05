@@ -101,7 +101,7 @@ const App: React.FC = () => {
         es_model_text_field: "ml.tokens",
         num_results: "3",
         sqlllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "meta-llama/llama-3-405b-instruct",
           inputs: [],
           user_id: pid,
           parameters: {
@@ -120,7 +120,7 @@ const App: React.FC = () => {
           },
         },
         classifyllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "meta-llama/llama-3-405b-instruct",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -138,7 +138,7 @@ const App: React.FC = () => {
           },
         },
         ragllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "meta-llama/llama-3-405b-instruct",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -156,7 +156,7 @@ const App: React.FC = () => {
           },
         },
         generalllm_params: {
-          model_id: "meta-llama/llama-3-70b-instruct",
+          model_id: "meta-llama/llama-3-405b-instruct",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
@@ -270,8 +270,8 @@ const App: React.FC = () => {
             key={index}
             className={`${
               message.role === "bot"
-                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] max-w-fit"
-                : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] break-words max-w-fit self-end lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
+                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] max-w-fit mr-10"
+                : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] break-words max-w-fit lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-10 mr-3"
             }`}
             style={{
               wordBreak: "break-word",
