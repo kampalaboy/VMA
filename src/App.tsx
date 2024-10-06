@@ -99,7 +99,7 @@ const App: React.FC = () => {
         es_index_text_field: "body_content_field",
         es_model_name: ".elser_model_2",
         es_model_text_field: "ml.tokens",
-        num_results: "3",
+        num_results: "1",
         sqlllm_params: {
           model_id: "meta-llama/llama-3-405b-instruct",
           inputs: [],
