@@ -236,7 +236,7 @@ const App: React.FC = () => {
       { id: 6, imgSrc: "assets/loaders/heartywave.gif" },
     ];
     function getRandomLoader() {
-      const randomIndex = Math.round(Math.random() * loaders.length);
+      const randomIndex = Math.floor(Math.random() * loaders.length);
       return loaders[randomIndex];
     }
     const chosenImg = getRandomLoader();
