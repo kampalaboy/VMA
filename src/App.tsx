@@ -94,6 +94,14 @@ const App: React.FC = () => {
       body: JSON.stringify({
         question: userInput,
         dbtype: "MYSQL",
+        ragllm_instructions: `[INST]<<SYS>>You are a helpful, respectful, and honest assistant. Always answer as helpfully as possible, while being safe. Be brief in your answers. 
+                              Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially 
+                              unbiased and positive in nature.\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. 
+                              If you don\\'''t know the answer to a question, please do not share false information. <</SYS>>\nGenerate the next agent response by answering the question. 
+                              You are provided several documents with titles. If the answer comes from different documents please mention all possibilities and use the 
+                              tiles of documents to separate between topics or domains. Answer with no more than 150 words. If you cannot base your answer on the given document, 
+                              please state that you do not have an answer.\n{context_str}<</SYS>>\n\n{query_str} Answer with no more than 150 words. If you cannot base your answer on the given document, 
+                              please state that you do not have an answer. [/INST]`,
         es_index_name: "health-docs-index",
         user_id: pid,
         es_index_text_field: "body_content_field",
@@ -180,7 +188,7 @@ const App: React.FC = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `https://gen-llm-service.1lvzmjbcniiy.us-south.codeengine.appdomain.cloud/${endpoint}`,
+          `https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
           optionsText
         );
         console.log(res);
@@ -234,7 +242,7 @@ const App: React.FC = () => {
       { id: 6, imgSrc: "assets/loaders/heartywave.gif" },
     ];
     function getRandomLoader() {
-      const randomIndex = Math.floor(Math.random() * loaders.length);
+      const randomIndex = Math.round(Math.random() * loaders.length);
       return loaders[randomIndex];
     }
     const chosenImg = getRandomLoader();
@@ -333,8 +341,8 @@ const App: React.FC = () => {
               className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
-                setSelectedEndpoint("queryLLM");
-                setResponser("llm_response");
+                setSelectedEndpoint("watsonchat");
+                setResponser("response");
               }}
             >
               <MdSend
