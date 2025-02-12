@@ -140,7 +140,7 @@ const App: React.FC = () => {
           },
         },
         ragllm_params: {
-          model_id: "granite-3-8b-instruct",
+          model_id: "meta-llama/llama-3-405b-instruct",
           inputs: [],
           parameters: {
             decoding_method: "greedy",
