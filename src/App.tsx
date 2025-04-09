@@ -14,6 +14,9 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imgSrc, setImgSrc] = useState<string>("");
 
+  const [sessionId, setSessionId] = useState<string>("");
+  const eventSourceRef = useRef<EventSource | null>(null);
+
   const params = window.location.search;
   const urlParams = new URLSearchParams(params);
   const pname = urlParams.get("name") || "";
@@ -61,7 +64,8 @@ const App: React.FC = () => {
         role: "bot",
         content:
           welcomeMessages[plang as keyof typeof welcomeMessages] ||
-          `Welcome to Life Health. How can I assist?`,
+          `Hello I'm VIMA.  Your fully integrated health assistant by LifeHealth.
+            How can I assist?`,
       },
     ]);
   }, [plang, pname, userId]);
@@ -94,7 +98,7 @@ const App: React.FC = () => {
       body: JSON.stringify({
         question: userInput,
         dbtype: "MYSQL",
-        ragllm_instructions: `[<|system|>\nYou are LifeHealth ChatBot. You are a cautious assistant. You carefully follow instructions. You are helpful and harmless and you follow ethical guidelines and promote positive behavior. If {query_str} is a greeting respond appropriately. Information will be provided to help answer the user's questions.  If you do not find the answer reply to the question appropriately.Also information will be provided on how to handle various support chain tasks i.e. troubleshooting, replying to reviews, answering FAQs. Please do not waste the response on any words other than the response. You look through the documents provided and find the appropriate response to {query_str}. 
+        ragllm_instructions: `[<|system|>\nYou are LifeHealth ChatBot. You are a cautious assistant. You carefully follow instructions. You are helpful and harmless and you follow ethical guidelines and promote positive behavior. If {query_str} is a greeting respond appropriately. Information will be provided to help answer the user's questions.  If you do not find the answer reply to the question appropriately.Also information will be provided on how to handle various support chain tasks i.e. troubleshooting, replying to reviews, answering FAQs. Please do not waste the response on any words other than the response. You look through the documents provided and find the appropriate response to {query_str}.
                               If the response makes sense as a list of steps number the steps accordingly using a \n to print the steps and answer only using the list of numbered steps like: 1.\n 2.\n 3.\nOtherwise, one sentence answers do not need the numbered steps just provide the response. Respond to {query_str} in the same language as {query_str} Take the same response in the documents and translate to the {query_str} language. <|user|>\n{context_str}\n\n{query_str}\n<|assistant|>`,
         es_index_name: "health-docs-index",
         user_id: pid,
@@ -226,25 +230,23 @@ const App: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const loaders = [
-      { id: 1, imgSrc: "assets/loaders/heartythink.gif" },
-      { id: 2, imgSrc: "assets/loaders/heartyread.gif" },
-      { id: 3, imgSrc: "assets/loaders/heartynotes.gif" },
-      { id: 4, imgSrc: "assets/loaders/heartysearch.gif" },
-      { id: 5, imgSrc: "assets/loaders/heartycompare.gif" },
-      { id: 6, imgSrc: "assets/loaders/heartywave.gif" },
-    ];
-    function getRandomLoader() {
-      const randomIndex = Math.floor(Math.random() * loaders.length);
-      return loaders[randomIndex];
-    }
-    const chosenImg = getRandomLoader();
-    setImgSrc(chosenImg.imgSrc);
-  }, [messages]);
-
   const latestMessage = useRef<HTMLDivElement>(null);
+  const loaders = [
+    { id: 1, imgSrc: "assets/loaders/heartythink.gif" },
+    { id: 2, imgSrc: "assets/loaders/heartyread.gif" },
+    { id: 3, imgSrc: "assets/loaders/heartynotes.gif" },
+    { id: 4, imgSrc: "assets/loaders/heartysearch.gif" },
+    { id: 5, imgSrc: "assets/loaders/heartycompare.gif" },
+    { id: 6, imgSrc: "assets/loaders/heartywave.gif" },
+  ];
 
+  function getRandomLoader() {
+    for (let i = 0; i < loaders.length; i++) {
+      const randomLoader = Math.floor(Math.random() * i);
+      const imgSrc = loaders[randomLoader].imgSrc;
+      return imgSrc;
+    }
+  }
   useEffect(() => {
     if (latestMessage.current) {
       latestMessage.current.scrollIntoView();
@@ -257,7 +259,7 @@ const App: React.FC = () => {
       <div className="h-16 px-4 py-3 flex justify-center items-center bg-blue-300 z-10">
         <div className="flex items-center justify-center gap-6 ">
           <div className="flex flex-col">
-            <span className="font-bold"> Life Health Chat Assistant</span>
+            <span className="font-bold"> VIMA</span>
           </div>
         </div>
       </div>
@@ -290,7 +292,7 @@ const App: React.FC = () => {
 
         {loading && (
           <img
-            src={imgSrc}
+            src={getRandomLoader()}
             id="loading"
             className="w-[100px] h-[100px] ml-10"
           />
