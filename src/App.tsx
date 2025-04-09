@@ -12,11 +12,6 @@ const App: React.FC = () => {
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
   const [responser, setResponser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [imgSrc, setImgSrc] = useState<string>("");
-
-  const [sessionId, setSessionId] = useState<string>("");
-  const eventSourceRef = useRef<EventSource | null>(null);
-
   const params = window.location.search;
   const urlParams = new URLSearchParams(params);
   const pname = urlParams.get("name") || "";
