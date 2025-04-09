@@ -59,8 +59,7 @@ const App: React.FC = () => {
         role: "bot",
         content:
           welcomeMessages[plang as keyof typeof welcomeMessages] ||
-          `Hello I'm VIMA.  Your fully integrated health assistant by LifeHealth.
-            How can I assist?`,
+          `Hello I'm VIMA. How can I help you?`,
       },
     ]);
   }, [plang, pname, userId]);
