@@ -24,7 +24,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const welcomeMessages = {
-      en: `Welcome to Life Health, ${pname}.  How can I assist?
+      en: `Hello, ${pname}.  I'm VIMA. How can I help?
             ${userId ? `🔍 : Search your Database` : ""}
           `,
       fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider?
