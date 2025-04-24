@@ -268,7 +268,7 @@ const App: React.FC = () => {
             key={index}
             className={`${
               message.role === "bot"
-                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] max-w-fit mr-10"
+                ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] w-fit lg:max-w-[50%] md:max-w-[70%] max-w-[90%] mr-10"
                 : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] break-words w-fit max-w-[90%] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
             }`}
             style={{
@@ -294,6 +294,12 @@ const App: React.FC = () => {
         <div ref={latestMessage}></div>
       </div>
 
+      <div className="bg-white text-gray-500 text-[10px] flex justify-center  inset-x-0">
+        <p>
+          AI-generated content may be inaccurate or misleading. Always check for
+          accuracy.
+        </p>
+      </div>
       {/* Send Messages*/}
       <div className="bg-rose-500 h-20 px-4 flex items-center relative">
         <div className="flex w-full">
