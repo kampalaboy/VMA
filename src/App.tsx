@@ -261,7 +261,7 @@ const App: React.FC = () => {
       {/* Messages Container*/}
       <div
         id="message-container"
-        className=" bg-white h-[80vh] w-full relative flex-grow overflow-auto"
+        className=" bg-white h-[80vh] w-full relative flex-grow overflow-auto scroll"
       >
         {messages.map((message, index) => (
           <div
@@ -294,8 +294,8 @@ const App: React.FC = () => {
         <div ref={latestMessage}></div>
       </div>
 
-      <div className="bg-white text-gray-500 text-[10px] flex justify-center  inset-x-0">
-        <p>
+      <div className="bg-white overflow-hidden pt-1 border-none">
+        <p className="text-gray-500 text-[9px] lg:text-[10px] flex justify-center">
           AI-generated content may be inaccurate or misleading. Always check for
           accuracy.
         </p>
