@@ -3,7 +3,7 @@ import "./App.css";
 import { MdSend } from "react-icons/md";
 // import SpeechToText from "./functions/stt";
 // import { FaMicrophone } from "react-icons/fa";
-import VoiceButton from "./functions/voicebutton";
+//import VoiceButton from "./functions/voicebutton";
 
 const App: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
