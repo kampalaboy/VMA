@@ -1,58 +1,48 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { MdSend } from "react-icons/md";
-import { RiSearch2Line } from "react-icons/ri";
+// import SpeechToText from "./functions/stt";
+// import { FaMicrophone } from "react-icons/fa";
+import VoiceButton from "./functions/voicebutton";
 
 const App: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     []
   );
   const [userInput, setUserInput] = useState<string>("");
-  const [userId, setUserId] = useState<string>("");
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
   const [responser, setResponser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
   const params = window.location.search;
   const urlParams = new URLSearchParams(params);
   const pname = urlParams.get("name") || "";
   const plang = urlParams.get("lang");
 
   const pid = urlParams.get("id") || "";
-  useEffect(() => {
-    setUserId(pid);
-  }, [pid]);
 
   useEffect(() => {
     const welcomeMessages = {
-      en: `Hello, ${pname}.  I'm VIMA. How can I help?
-            ${userId ? `🔍 : Search your Database` : ""}
-          `,
-      fr: `Bienvenue sur Life Health, ${pname}.  Comment puis-je vous aider?
-            ${userId ? `🔍 : Rechercher dans votre base de données` : ""}
-          `,
-
-      es: `Bienvenido a Life Health, ${pname}.  ¿En qué puedo ayudar?
-            ${userId ? ` 🔍 : Busca en tu base de datos` : ""}
-          `,
-      pt: `Bem-vindo à Life Health, ${pname}. Como posso ajudar?
-            ${userId ? ` 🔍 : Pesquise a sua base de dados` : ""}
-          `,
-      lg: `Mwaniriziddwa mu Life Health, ${pname}.  Nnyinza ntya okuyamba?
-            ${userId ? ` 🔍 : Noonya ku Database yo` : ""}
-          `,
-      nyn: `Murakaza neza kubuzima, ${pname}. Nigute nshobora gufasha?`,
-      sw: `Karibu kwenye Life Health, ${pname}.  Naweza kukusaidia vipi?
-            ${userId ? ` 🔍 : Tafuta Hifadhidata yako` : ""}       
-            `,
-      am: `እንኳን ወደ ሕይወት ጤና፣ ${pname} በደህና መጡ። እንዴት መርዳት እችላለሁ?
-          ${userId ? `🔍 ፡ ዳታቤዝህን ፈልግ` : ""}
-            `,
-      hi: `लाइफ हेल्थ में आपका स्वागत है, ${pname}. मैं आपकी सहायता कैसे कर सकता हूँ?
-          ${userId ? `🔍 : अपना डेटाबेस खोजें` : ""}
-            `,
-      ar: `مرحبًا بك في Life Health، ${pname}. كيف يمكنني المساعدة؟
-          ${userId ? ` 🔍 : ابحث في قاعدة البيانات الخاصة بك` : ""}
-            `,
+      en: `Hello, ${pname}. I'm VIMA. How can I help?
+      `,
+      fr: `Bonjour, ${pname}. Je suis VIMA. Comment puis-je vous aider?
+      `,
+      es: `Hola, ${pname}. Soy VIMA. ¿Cómo puedo ayudarte?
+      `,
+      pt: `Olá, ${pname}. Eu sou VIMA. Como posso ajudar?
+      `,
+      lg: `Oli otya, ${pname}. Nze VIMA. Nnyamba ntya?
+      `,
+      nyn: `Oraire ${pname}. Ndi VIMA. Ninkukoonyera nta?
+      `,
+      sw: `Hujambo, ${pname}. Mimi ni VIMA. Nawezaje kusaidia?
+      `,
+      am: `ሰላም, ${pname}. እኔ VIMA ነኝ። እንዴት ልረዳዎት?
+      `,
+      hi: `नमस्ते, ${pname}। मैं VIMA हूं। मैं कैसे मदद कर सकता हूं?
+      `,
+      ar: `مرحباً ${pname}. أنا VIMA. كيف يمكنني المساعدة؟
+      `,
     };
     setMessages([
       {
@@ -62,7 +52,7 @@ const App: React.FC = () => {
           `Hello I'm VIMA. How can I help you?`,
       },
     ]);
-  }, [plang, pname, userId]);
+  }, [plang, pname]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -181,6 +171,7 @@ const App: React.FC = () => {
       try {
         const res = await fetch(
           `https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
+          // `http://localhost:4050/${endpoint}`,
           optionsText
         );
         console.log(res);
@@ -203,6 +194,15 @@ const App: React.FC = () => {
           };
 
           answer = replies[plang as keyof typeof replies] || replies.en;
+          if (endpoint == "stt") {
+            const data = await res.json();
+            const transcript = data.transcript;
+            setMessages([
+              ...messages,
+              userMessage,
+              { role: "user", content: transcript.trim() },
+            ]);
+          }
         } else {
           answer = data[responser];
           console.log(answer);
@@ -250,7 +250,7 @@ const App: React.FC = () => {
   return (
     <div className="border-black w-screen flex flex-col h-[100vh] z-10 ">
       {/* Header*/}
-      <div className="h-16 px-4 py-3 flex justify-center items-center bg-blue-300 z-10">
+      <div className="h-16 px-4 py-3 flex justify-center items-center bg-blue-600 z-10">
         <div className="flex items-center justify-center gap-6 ">
           <div className="flex flex-col">
             <span className="font-bold"> VIMA</span>
@@ -301,7 +301,7 @@ const App: React.FC = () => {
         </p>
       </div>
       {/* Send Messages*/}
-      <div className="bg-rose-500 h-20 px-4 flex items-center relative">
+      <div className="bg-rose-700 h-20 px-4 flex items-center relative">
         <div className="flex w-full">
           <form
             onSubmit={handleSubmit}
@@ -316,24 +316,10 @@ const App: React.FC = () => {
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
               />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 space-x-3 ">
-                {userId && (
-                  <button
-                    id="dbQuery"
-                    className="rounded-full p-1 bg-transparent"
-                    type="submit"
-                    onClick={() => {
-                      setSelectedEndpoint("watsonchat");
-                      setResponser("response");
-                    }}
-                  >
-                    <RiSearch2Line size={23} />
-                  </button>
-                )}
-              </div>
             </div>
+            {/* <VoiceButton setUserInput={setUserInput} /> */}
             <button
-              id="generalQuery"
+              id="query"
               className="rounded-full p-1 bg-transparent"
               type="submit"
               onClick={() => {
