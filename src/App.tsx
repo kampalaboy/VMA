@@ -96,7 +96,7 @@ const App: React.FC = () => {
           user_id: pid,
           parameters: {
             decoding_method: "greedy",
-            max_new_tokens: 100,
+            max_new_tokens: 300,
             min_new_tokens: 1,
             moderations: {
               hap_input: "true",
@@ -171,7 +171,7 @@ const App: React.FC = () => {
       try {
         const res = await fetch(
           `https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
-          // `http://localhost:4050/${endpoint}`,
+          //`http://localhost:4050/${endpoint}`,
           optionsText
         );
         console.log(res);
