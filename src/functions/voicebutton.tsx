@@ -1,17 +1,16 @@
 import React from "react";
 import { FaMicrophone, FaStop } from "react-icons/fa";
-import { useSpeechToText } from "./stt"; // Import the hook
+import useSTT from "./stt";
 
 interface VoiceButtonProps {
   setUserInput: (text: string) => void;
 }
 
-const VoiceButton: React.FC<VoiceButtonProps> = ({ setUserInput }) => {
-  const { transcript, isRecording, startRecording, stopRecording } =
-    useSpeechToText();
+const VoiceButton = () => {
+  const { isRecording, startSTT, stopSTT, transcript } = useSTT();
   console.log(transcript);
 
-  setUserInput(transcript);
+  //setUserInput(transcript);
 
   return (
     <>
@@ -21,12 +20,12 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({ setUserInput }) => {
         type="button"
       >
         {isRecording ? (
-          <FaStop color="red" className="text-xl" onClick={stopRecording} />
+          <FaStop color="red" className="text-xl" onClick={stopSTT} />
         ) : (
           <FaMicrophone
             color="black"
             className="text-gray-400 text-xl"
-            onClick={startRecording}
+            onClick={startSTT}
           />
         )}
       </button>
