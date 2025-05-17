@@ -3,33 +3,53 @@ import { FaMicrophone, FaStop } from "react-icons/fa";
 import useSTT from "./stt";
 
 interface VoiceButtonProps {
-  setUserInput: (text: string) => void;
+  setMessages: React.Dispatch<
+    React.SetStateAction<{ role: string; content: string }[]>
+  >;
+  messages: { role: string; content: string }[];
+  // startInteract: (
+  //   userInput: string,
+  //   userMessage: { role: string; content: string },
+  //   endpoint: string,
+  //   responser: string
+  // ) => Promise<void>;
 }
 
-const VoiceButton = () => {
-  const { isRecording, startSTT, stopSTT, transcript } = useSTT();
-  console.log(transcript);
+const VoiceButton: React.FC<VoiceButtonProps> = ({ setMessages, messages }) => {
+  const { isRecording, startSTT, stopSTT } = useSTT();
 
-  //setUserInput(transcript);
+  const handleVoiceStop = async () => {
+    if (isRecording) {
+      try {
+        const audioUrl = await stopSTT();
+        if (audioUrl) {
+          const userMessage = {
+            role: "user",
+            content:
+              "Voice message sent at: " + new Date().toLocaleTimeString(),
+            audioUrl: audioUrl,
+          };
+          setMessages([...messages, userMessage]);
+        }
+      } catch (error) {
+        console.error("Failed to stop recording:", error);
+      }
+    }
+  };
 
   return (
-    <>
-      <button
-        id="voice"
-        className="rounded-full p-1 bg-transparent"
-        type="button"
-      >
-        {isRecording ? (
-          <FaStop color="red" className="text-xl" onClick={stopSTT} />
-        ) : (
-          <FaMicrophone
-            color="black"
-            className="text-gray-400 text-xl"
-            onClick={startSTT}
-          />
-        )}
-      </button>
-    </>
+    <button
+      type="button"
+      className="rounded-full p-1 bg-transparent"
+      onClick={isRecording ? handleVoiceStop : startSTT}
+      aria-label={isRecording ? "Stop recording" : "Start recording"}
+    >
+      {isRecording ? (
+        <FaStop color="red" className="text-xl" />
+      ) : (
+        <FaMicrophone color="black" className="text-gray-400 text-xl" />
+      )}
+    </button>
   );
 };
 

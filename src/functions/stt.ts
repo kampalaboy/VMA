@@ -1,85 +1,85 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-interface STTResponse {
-  message: string;
-  transcript?: string;
-  error?: string;
-  debug_info?: {
-    audio_received: boolean;
-    interim_results_count: number;
-    last_interim_results: string[];
-    transcript_segments_count: number;
-  };
+interface STTHookReturn {
+  isRecording: boolean;
+  error: string | null;
+  startSTT: () => Promise<void>;
+  stopSTT: () => Promise<string>;
+  audioUrl: string | null;
 }
 
-const useSTT = () => {
+function useSTT(): STTHookReturn {
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [transcript, setTranscript] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const fetchWatsonSTT = async (endpoint: string): Promise<STTResponse> => {
-    try {
-      const res = await fetch(`http://localhost:4050/${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      console.error("STT Error:", error);
-      throw error;
-    }
-  };
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const audioChunks = useRef<Blob[]>([]);
 
   const startSTT = async () => {
     try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunks.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
       setError(null);
-      const response = await fetchWatsonSTT("start_stt");
-      if (response.message.includes("started successfully")) {
-        setIsRecording(true);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to start STT");
-      return false;
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to start recording"
+      );
     }
   };
 
   const stopSTT = async (): Promise<string> => {
-    try {
-      setError(null);
-      const response = await fetchWatsonSTT("stop_stt");
-      setIsRecording(false);
-
-      if (response.transcript) {
-        const data = response.transcript;
-        setTranscript(data);
-        return data;
+    return new Promise((resolve, reject) => {
+      if (mediaRecorderRef.current && isRecording) {
+        mediaRecorderRef.current.onstop = () => {
+          const audioBlob = new Blob(audioChunks.current, {
+            type: "audio/wav",
+          });
+          const url = URL.createObjectURL(audioBlob);
+          setAudioUrl(url);
+          setIsRecording(false);
+          resolve(url);
+        };
+        mediaRecorderRef.current.stop();
+        mediaRecorderRef.current.stream
+          .getTracks()
+          .forEach((track) => track.stop());
       } else {
-        throw new Error(response.message || "No transcript received");
+        reject(new Error("No recording in progress"));
       }
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to stop STT");
-      setIsRecording(false);
-      return "";
-    }
+    });
   };
+
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stream
+          .getTracks()
+          .forEach((track) => track.stop());
+      }
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+      }
+    };
+  }, [audioUrl]);
 
   return {
     isRecording,
     error,
     startSTT,
     stopSTT,
-    transcript,
+    audioUrl,
   };
-};
+}
 
 export default useSTT;
