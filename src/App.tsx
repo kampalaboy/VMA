@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { MdSend, MdRefresh } from "react-icons/md";
-import VoiceButton from "./functions/voicebutton";
+//import VoiceButton from "./functions/voicebutton";
 // import SpeechToText from "./functions/stt";
 // import { FaMicrophone } from "react-icons/fa";
 //import VoiceButton from "./functions/voicebutton";
@@ -351,7 +351,7 @@ const App: React.FC = () => {
               <div className="absolute top-1/2 right-1 transform -translate-y-1/2">
                 {" "}
                 {/* Position the button container */}
-                {userInput ? (
+                {/* {userInput ? (
                   <button
                     id="query"
                     className="bg-transparent p-1 rounded-full"
@@ -365,7 +365,18 @@ const App: React.FC = () => {
                   </button>
                 ) : (
                   <VoiceButton setMessages={setMessages} messages={messages} />
-                )}
+                )} */}
+                <button
+                  id="query"
+                  className="bg-transparent p-1 rounded-full"
+                  type="submit"
+                  onClick={() => {
+                    setSelectedEndpoint("watsonchat");
+                    setResponser("response");
+                  }}
+                >
+                  <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
+                </button>
               </div>
             </div>
           </form>

@@ -42,6 +42,10 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({ setMessages, messages }) => {
       type="button"
       className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent rounded-full"
       onClick={isRecording ? handleVoiceStop : startSTT}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        isRecording ? handleVoiceStop() : startSTT();
+      }}
       aria-label={isRecording ? "Stop recording" : "Start recording"}
     >
       {isRecording ? (
