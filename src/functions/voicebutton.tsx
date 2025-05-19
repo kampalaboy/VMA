@@ -40,7 +40,7 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({ setMessages, messages }) => {
   return (
     <button
       type="button"
-      className="rounded-full p-1 bg-transparent"
+      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent rounded-full"
       onClick={isRecording ? handleVoiceStop : startSTT}
       aria-label={isRecording ? "Stop recording" : "Start recording"}
     >

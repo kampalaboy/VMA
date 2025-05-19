@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
-import { MdSend } from "react-icons/md";
+import { MdSend, MdRefresh } from "react-icons/md";
+import VoiceButton from "./functions/voicebutton";
 // import SpeechToText from "./functions/stt";
 // import { FaMicrophone } from "react-icons/fa";
 //import VoiceButton from "./functions/voicebutton";
@@ -66,6 +67,7 @@ const App: React.FC = () => {
     if (!userInput.trim()) return;
 
     const userMessage = { role: "user", content: userInput };
+    console.log(userInput);
     setMessages([...messages, userMessage]);
     setUserInput("");
     await startInteract(userInput, userMessage, selectedEndpoint, responser);
@@ -87,11 +89,15 @@ const App: React.FC = () => {
         "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
-        question: messages.toString() + userInput,
+        question: userInput,
+        // convo: messages.map((msg) => ({
+        //   role: msg.role,
+        //   content: msg.content,
+        // })),
         dbtype: "MYSQL",
         ragllm_instructions: `[<|system|>\nYou are LifeHealth ChatBot. You are a cautious assistant. 
-                              You carefully follow instructions. You are helpful and harmless and you follow ethical guidelines and promote positive behavior. If {query_str} is a greeting respond appropriately. Information will be provided to help answer the user's questions.  If you do not find the answer reply to the question appropriately.Also information will be provided on how to handle various support chain tasks i.e. troubleshooting, replying to reviews, answering FAQs. Please do not waste the response on any words other than the response. You look through the documents provided and find the appropriate response to {query_str}.
-                              If the response makes sense as a list of steps number the steps accordingly using a \n to print the steps and answer only using the list of numbered steps like: 1.\n 2.\n 3.\nOtherwise, one sentence answers do not need the numbered steps just provide the response. Respond to {query_str} in the same language as {query_str} Take the same response in the documents and translate to the {query_str} language. <|user|>\n{context_str}\n\n{query_str}\n<|assistant|>`,
+                  You carefully follow instructions. You are helpful and harmless and you follow ethical guidelines and promote positive behavior. If {query_str} is a greeting respond appropriately. Information will be provided to help answer the user's questions.  If you do not find the answer reply to the question appropriately.Also information will be provided on how to handle various support chain tasks i.e. troubleshooting, replying to reviews, answering FAQs. Please do not waste the response on any words other than the response. You look through the documents provided and find the appropriate response to {query_str}.
+                  If the response makes sense as a list of steps number the steps accordingly using a \n to print the steps and answer only using the list of numbered steps like: 1.\n 2.\n 3.\nOtherwise, one sentence answers do not need the numbered steps just provide the response. Respond to {query_str} in the same language as {query_str} Take the same response in the documents and translate to the {query_str} language. <|user|>\n{context_str}\n\n{query_str}\n<|assistant|>`,
         es_index_name: "health-docs-index",
         user_id: pid,
         es_index_text_field: "body_content_field",
@@ -101,7 +107,6 @@ const App: React.FC = () => {
         sqlllm_params: {
           model_id: "meta-llama/llama-3-405b-instruct",
           inputs: [],
-          user_id: pid,
           parameters: {
             decoding_method: "greedy",
             max_new_tokens: 300,
@@ -178,8 +183,8 @@ const App: React.FC = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
-          //`http://localhost:4050/${endpoint}`,
+          //`https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
+          `http://localhost:4050/${endpoint}`,
           optionsText
         );
         console.log(res);
@@ -255,10 +260,20 @@ const App: React.FC = () => {
   return (
     <div className="border-black w-screen flex flex-col h-[100vh] z-10 ">
       {/* Header*/}
-      <div className="h-16 px-4 py-3 flex justify-center items-center bg-blue-600 z-10">
-        <div className="flex items-center justify-center gap-6 ">
-          <div className="flex flex-col">
-            <span className="font-bold"> VIMA</span>
+      <div className="h-16 px-4 py-3 flex justify-between items-center bg-blue-600 w-full z-10">
+        <div className="w-1/3"></div>
+        <div className="w-1/3 flex justify-center">
+          <span className="font-bold">VIMA</span>
+        </div>
+        <div className="w-1/3 flex justify-end">
+          <div
+            onClick={() => window.location.reload()}
+            className="bg-transparent py-1 px-4 rounded-md hover:cursor-pointer"
+          >
+            <MdRefresh
+              size={23}
+              className="transition-transform active:animate-[spin_1s_ease-in-out]"
+            />
           </div>
         </div>
       </div>
@@ -266,7 +281,7 @@ const App: React.FC = () => {
       {/* Messages Container*/}
       <div
         id="message-container"
-        className=" bg-white h-[80vh] w-full relative flex-grow overflow-auto scroll"
+        className=" bg-amber-50 h-[80vh] w-full relative flex-grow overflow-auto scroll"
       >
         {messages.map((message, index) => (
           <div
@@ -280,12 +295,12 @@ const App: React.FC = () => {
               wordBreak: "break-word",
             }}
           >
-            {/* {message.audioUrl && (
+            {message.audioUrl && (
               <audio controls className="mb-2 max-w-full">
                 <source src={message.audioUrl} type="audio/wav" />
                 Your browser does not support the audio element.
               </audio>
-            )} */}
+            )}
             {message.content.split("\n").map((line, i) => (
               <React.Fragment key={i}>
                 {line}
@@ -312,37 +327,47 @@ const App: React.FC = () => {
         </p>
       </div>
       {/* Send Messages*/}
-      <div className="bg-rose-600 h-20 px-4 flex items-center relative">
+      <div className="bg-rose-600 h-20 px-4 flex flex-grow items-center relative">
         <div className="flex w-full">
           <form
             onSubmit={handleSubmit}
             className="flex w-full  gap-x-2 space-x-1"
           >
-            <div className="relative w-full gap-x-2">
-              <input
-                id="inputBot"
-                type="text"
-                placeholder="Type a message"
-                className="text-sm focus:outline-none h-10 rounded-lg px-5 py-4 w-full pr-24"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-              />
+            <div className="bg-white dark:bg-neutral-700 rounded-[20px] relative w-full">
+              <div className="overflow-hidden">
+                <textarea
+                  id="inputBot"
+                  placeholder="Type a message"
+                  className="bg-white dark:bg-neutral-700 text-sm focus:outline-none rounded-[20px] w-[85%] h-[50px] py-4 pl-6 leading-3 outline-none disabled:opacity-0 overflow-y-auto touch-pan-y " // Increased right padding (pr-12)
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                  style={{
+                    WebkitOverflowScrolling: "touch",
+                    overscrollBehavior: "contain",
+                    paddingRight: "calc(2rem + 12px)",
+                  }}
+                />
+              </div>
+              <div className="absolute top-1/2 right-1 transform -translate-y-1/2">
+                {" "}
+                {/* Position the button container */}
+                {userInput ? (
+                  <button
+                    id="query"
+                    className="bg-transparent p-1 rounded-full"
+                    type="submit"
+                    onClick={() => {
+                      setSelectedEndpoint("watsonchat");
+                      setResponser("response");
+                    }}
+                  >
+                    <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
+                  </button>
+                ) : (
+                  <VoiceButton setMessages={setMessages} messages={messages} />
+                )}
+              </div>
             </div>
-            {/* <VoiceButton messages={messages} setMessages={setMessages} /> */}
-            <button
-              id="query"
-              className="rounded-full p-1 bg-transparent"
-              type="submit"
-              onClick={() => {
-                setSelectedEndpoint("watsonchat");
-                setResponser("response");
-              }}
-            >
-              <MdSend
-                color="black"
-                className=" text-gray-400 cursor-pointer text-xl"
-              />
-            </button>
           </form>
         </div>
       </div>
