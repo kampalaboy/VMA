@@ -40,7 +40,7 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({ setMessages, messages }) => {
   return (
     <button
       type="button"
-      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent rounded-full"
+      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent rounded-full z-20"
       onClick={isRecording ? handleVoiceStop : startSTT}
       onTouchEnd={(e) => {
         e.preventDefault();

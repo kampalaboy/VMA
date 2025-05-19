@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { MdSend, MdRefresh } from "react-icons/md";
-//import VoiceButton from "./functions/voicebutton";
+import VoiceButton from "./functions/voicebutton";
 // import SpeechToText from "./functions/stt";
 // import { FaMicrophone } from "react-icons/fa";
 //import VoiceButton from "./functions/voicebutton";
@@ -183,8 +183,8 @@ const App: React.FC = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          //`https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
-          `http://localhost:4050/${endpoint}`,
+          `https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
+          //`http://localhost:4050/${endpoint}`,
           optionsText
         );
         console.log(res);
@@ -338,20 +338,15 @@ const App: React.FC = () => {
                 <textarea
                   id="inputBot"
                   placeholder="Type a message"
-                  className="bg-white dark:bg-neutral-700 text-sm focus:outline-none rounded-[20px] w-[85%] h-[50px] py-4 pl-6 leading-3 outline-none disabled:opacity-0 overflow-y-auto touch-pan-y " // Increased right padding (pr-12)
+                  className="bg-white dark:bg-neutral-700 text-sm focus:outline-none rounded-[20px] w-[90%] h-[50px] py-4 pl-6 leading-3 outline-none disabled:opacity-0 overflow-y-auto touch-pan-y " // Increased right padding (pr-12)
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
-                  style={{
-                    WebkitOverflowScrolling: "touch",
-                    overscrollBehavior: "contain",
-                    paddingRight: "calc(2rem + 12px)",
-                  }}
                 />
               </div>
               <div className="absolute top-1/2 right-1 transform -translate-y-1/2">
                 {" "}
                 {/* Position the button container */}
-                {/* {userInput ? (
+                {userInput ? (
                   <button
                     id="query"
                     className="bg-transparent p-1 rounded-full"
@@ -365,18 +360,18 @@ const App: React.FC = () => {
                   </button>
                 ) : (
                   <VoiceButton setMessages={setMessages} messages={messages} />
-                )} */}
-                <button
-                  id="query"
-                  className="bg-transparent p-1 rounded-full"
-                  type="submit"
-                  onClick={() => {
-                    setSelectedEndpoint("watsonchat");
-                    setResponser("response");
-                  }}
-                >
-                  <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
-                </button>
+                )}
+                {/* <button
+                    id="query"
+                    className="bg-transparent p-1 rounded-full"
+                    type="submit"
+                    onClick={() => {
+                      setSelectedEndpoint("watsonchat");
+                      setResponser("response");
+                    }}
+                  >
+                    <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
+                  </button> */}
               </div>
             </div>
           </form>
