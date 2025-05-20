@@ -287,7 +287,9 @@ const App: React.FC = () => {
           <div
             key={index}
             className={`${
-              message.role === "bot"
+              message.audioUrl
+                ? " text-black rounded-lg mb-[10px] p-[10px] break-words w-fit max-w-[90%] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
+                : message.role === "bot"
                 ? "bg-green-400 text-black rounded-lg mb-[10px] m-3 p-[10px] w-fit lg:max-w-[50%] md:max-w-[70%] max-w-[90%] mr-10"
                 : "bg-teal-600 text-black rounded-lg mb-[10px] p-[10px] break-words w-fit max-w-[90%] lg:ml-auto lg:mr-1 md:ml-auto md:mr-1 ml-auto mr-3"
             }`}
