@@ -330,40 +330,41 @@ const App: React.FC = () => {
       </div>
       {/* Send Messages*/}
       <div className="bg-rose-600 h-20 px-4 flex flex-grow items-center relative">
-        <div className="flex w-full">
-          <form
-            onSubmit={handleSubmit}
-            className="flex w-full  gap-x-2 space-x-1"
-          >
-            <div className="bg-white dark:bg-neutral-700 rounded-[20px] relative w-full">
-              <div className="overflow-hidden">
-                <textarea
-                  id="inputBot"
-                  placeholder="Type a message"
-                  className="bg-white dark:bg-neutral-700 text-sm focus:outline-none rounded-[20px] w-[90%] h-[50px] py-4 pl-6 leading-3 outline-none disabled:opacity-0 overflow-y-auto touch-pan-y " // Increased right padding (pr-12)
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                />
-              </div>
-              <div className="absolute top-1/2 right-1 transform -translate-y-1/2">
-                {" "}
-                {/* Position the button container */}
-                {userInput ? (
-                  <button
-                    id="query"
-                    className="bg-transparent p-1 rounded-full"
-                    type="submit"
-                    onClick={() => {
-                      setSelectedEndpoint("watsonchat");
-                      setResponser("response");
-                    }}
-                  >
-                    <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
-                  </button>
-                ) : (
-                  <VoiceButton setMessages={setMessages} messages={messages} />
-                )}
-                {/* <button
+        <form
+          onSubmit={handleSubmit}
+          className="flex w-full  gap-x-2 space-x-1"
+        >
+          <div className=" relative w-full">
+            <textarea
+              id="inputBot"
+              //type="text"
+              placeholder="Type a message"
+              className="bg-white dark:bg-neutral-700 text-sm rounded-[20px] w-full min-h-[20px] max-h-[50px] py-4 px-6 pr-6 overflow-y-hidden touch-pan-y whitespace-pre-wrap break-words"
+              value={userInput}
+              onChange={(e) => {
+                setUserInput(e.target.value);
+              }}
+            />
+          </div>
+          <div className="relative">
+            {" "}
+            {/* Position the button container */}
+            {userInput ? (
+              <button
+                id="query"
+                className="bg-transparent p-1 my-3 rounded-full"
+                type="submit"
+                onClick={() => {
+                  setSelectedEndpoint("watsonchat");
+                  setResponser("response");
+                }}
+              >
+                <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
+              </button>
+            ) : (
+              <VoiceButton setMessages={setMessages} messages={messages} />
+            )}
+            {/* <button
                     id="query"
                     className="bg-transparent p-1 rounded-full"
                     type="submit"
@@ -374,10 +375,8 @@ const App: React.FC = () => {
                   >
                     <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
                   </button> */}
-              </div>
-            </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );
