@@ -15,6 +15,51 @@ function useSTT(): STTHookReturn {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const audioChunks = useRef<Blob[]>([]);
 
+  const audioElements = useRef<{ [key: string]: HTMLAudioElement }>({});
+
+  function preloadAudio(src: string) {
+    const audio = new Audio();
+    audio.src = src;
+    audio.preload = "auto";
+    audioElements.current[src] = audio;
+
+    // Return a promise that resolves when the audio is loaded
+    return new Promise((resolve, reject) => {
+      audio.oncanplaythrough = resolve;
+      audio.onerror = reject;
+    });
+  }
+
+  // Preload audio files when the hook is initialized
+  useEffect(() => {
+    const loadAudios = async () => {
+      try {
+        await Promise.all([
+          preloadAudio("assets/notify/stopsttandsend.mp3"),
+          preloadAudio("assets/notify/startstt.wav"),
+        ]);
+      } catch (error) {
+        console.error("Failed to preload audio files:", error);
+      }
+    };
+
+    loadAudios();
+  }, []);
+
+  const playNotification = async (src: string) => {
+    try {
+      const audio = audioElements.current[src];
+      if (!audio) {
+        throw new Error(`Audio not preloaded: ${src}`);
+      }
+
+      audio.currentTime = 0;
+      await audio.play();
+    } catch (error) {
+      console.error("Failed to play notification:", error);
+    }
+  };
+
   const startSTT = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -29,7 +74,10 @@ function useSTT(): STTHookReturn {
       };
 
       mediaRecorder.start();
+
       setIsRecording(true);
+      await playNotification("assets/notify/startstt.wav");
+
       setError(null);
     } catch (err) {
       setError(
@@ -51,6 +99,8 @@ function useSTT(): STTHookReturn {
           resolve(url);
         };
         mediaRecorderRef.current.stop();
+        playNotification("assets/notify/stopsttandsend.mp3");
+
         mediaRecorderRef.current.stream
           .getTracks()
           .forEach((track) => track.stop());
