@@ -17,6 +17,21 @@ function useSTT(): STTHookReturn {
 
   const audioElements = useRef<{ [key: string]: HTMLAudioElement }>({});
 
+  const [isWebviewEnvironment, setIsWebviewEnvironment] = useState(false);
+
+  const isWebview = () => {
+    const userAgent = navigator.userAgent;
+    return (
+      userAgent.includes("wv") || // Android WebView
+      (userAgent.includes("Version/") && userAgent.includes("Mobile/")) // iOS UIWebView
+      //window.navigator.standalone === false // iOS WKWebView
+    );
+  };
+
+  useEffect(() => {
+    setIsWebviewEnvironment(isWebview());
+  }, []);
+
   function preloadAudio(src: string) {
     const audio = new Audio();
     audio.src = src;
@@ -61,6 +76,19 @@ function useSTT(): STTHookReturn {
   };
 
   const startSTT = async () => {
+    if (isWebviewEnvironment) {
+      // More thorough checks for webview
+      if (!window.MediaRecorder) {
+        setError("Recording not supported in this app environment");
+        return;
+      }
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setError("Microphone access not available in this app");
+        return;
+      }
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
