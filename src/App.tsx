@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { MdSend } from "react-icons/md";
 
-import { startInteract } from "./functions/AI/agnosticAPI";
+import { startInteract } from "./functions/AI/watsonAPI";
 import VoiceButton from "./functions/vb2";
 
 import getRandomLoader from "./utils/loadAnimate";
@@ -23,7 +23,7 @@ const App: React.FC = () => {
   const [user, setUser] = useState<string>("");
   const [lang, setLang] = useState<string>("");
 
-  //const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
+  const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
   const [responser, setResponser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -85,12 +85,11 @@ const App: React.FC = () => {
       setMessages,
       setLoading,
       messages,
-      user,
       userInput,
       userId,
       lang,
       userMessage,
-      //selectedEndpoint,
+      selectedEndpoint,
       responser
     );
   };
@@ -150,8 +149,8 @@ const App: React.FC = () => {
                 className="bg-transparent p-1 my-3 rounded-full"
                 type="submit"
                 onClick={() => {
-                  //setSelectedEndpoint("watsonchat");
-                  setResponser("output");
+                  setSelectedEndpoint("watsonchat");
+                  setResponser("response");
                 }}
               >
                 <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
