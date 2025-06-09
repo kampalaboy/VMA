@@ -4,8 +4,9 @@ interface STTHookReturn {
   isRecording: boolean;
   error: string | null;
   startSTT: () => Promise<void>;
-  stopSTT: () => Promise<string>;
+  stopSTT: () => Promise<{ audioUrl: string; audioData: string }>;
   audioUrl: string | null;
+  audioData: string | null;
 }
 
 function useSTT(): STTHookReturn {
@@ -13,6 +14,8 @@ function useSTT(): STTHookReturn {
   const [isRecording, setIsRecording] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioData, setAudioData] = useState<string | null>(null); // <== added
+
   const audioChunks = useRef<Blob[]>([]);
 
   const audioElements = useRef<{ [key: string]: HTMLAudioElement }>({});
@@ -114,18 +117,32 @@ function useSTT(): STTHookReturn {
     }
   };
 
-  const stopSTT = async (): Promise<string> => {
+  const stopSTT = async (): Promise<{
+    audioUrl: string;
+    audioData: string;
+  }> => {
     return new Promise((resolve, reject) => {
       if (mediaRecorderRef.current && isRecording) {
         mediaRecorderRef.current.onstop = () => {
           const audioBlob = new Blob(audioChunks.current, {
-            type: "audio/wav",
+            type: "audio/mp3",
           });
           const url = URL.createObjectURL(audioBlob);
+
           setAudioUrl(url);
           setIsRecording(false);
-          resolve(url);
+          // Convert to Base64
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const result = reader.result as string;
+            const base64 = result.split(",")[1]; // remove data:mime/type;base64, prefix
+            setAudioData(base64);
+            resolve({ audioUrl: url, audioData: base64 });
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(audioBlob); // base64 encode the blob
         };
+
         mediaRecorderRef.current.stop();
         playNotification("assets/notify/stopsttandsend.mp3");
 
@@ -157,6 +174,7 @@ function useSTT(): STTHookReturn {
     startSTT,
     stopSTT,
     audioUrl,
+    audioData,
   };
 }
 
