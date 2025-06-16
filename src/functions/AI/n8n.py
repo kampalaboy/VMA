@@ -45,7 +45,7 @@ payload = [
                     "date": 1748687507,
                     "voice": {
                         "file_name": audio_file_path,
-                        "mime_type": "audio/mp3",
+                        "mime_type": "audio/webm",
                         "data": audio_data
                     }
                 }
@@ -72,7 +72,7 @@ print(response)
 # print(f"Response: {response.text}")
 
 if response.status_code == 200:
-    with open("downloaded_audio.mp3", "wb") as f:
+    with open("downloaded_audio.wav", "wb") as f:
         f.write(response.content)
     print("✅ Audio downloaded as downloaded_audio.mp3")
 else:

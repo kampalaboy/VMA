@@ -124,31 +124,65 @@ function useSTT(): STTHookReturn {
     return new Promise((resolve, reject) => {
       if (mediaRecorderRef.current && isRecording) {
         mediaRecorderRef.current.onstop = () => {
-          const audioBlob = new Blob(audioChunks.current, {
-            type: "audio/mp3",
-          });
-          const url = URL.createObjectURL(audioBlob);
+          // Ensure we have audio data
+          if (audioChunks.current.length === 0) {
+            reject(new Error("No audio data recorded"));
+            return;
+          }
 
-          setAudioUrl(url);
-          setIsRecording(false);
-          // Convert to Base64
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const result = reader.result as string;
-            const base64 = result.split(",")[1]; // remove data:mime/type;base64, prefix
-            setAudioData(base64);
-            resolve({ audioUrl: url, audioData: base64 });
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(audioBlob); // base64 encode the blob
+          try {
+            // Create blob with proper MIME type
+            const audioBlob = new Blob(audioChunks.current, {
+              type: "audio/mp3", // Changed from audio/mp3 for better compatibility
+            });
+
+            // Verify blob size
+            if (audioBlob.size === 0) {
+              reject(new Error("Empty audio blob created"));
+              return;
+            }
+
+            // Create URL with error handling
+            const url = URL.createObjectURL(audioBlob);
+            if (!url) {
+              reject(new Error("Failed to create blob URL"));
+              return;
+            }
+
+            setAudioUrl(url);
+            setIsRecording(false);
+
+            // Convert to Base64 with proper error handling
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              if (!reader.result) {
+                reject(new Error("Failed to read audio data"));
+                return;
+              }
+              const result = reader.result as string;
+              const base64 = result.split(",")[1];
+              setAudioData(base64);
+              resolve({ audioUrl: url, audioData: base64 });
+            };
+            reader.onerror = (error) => {
+              reject(new Error(`Failed to convert audio to base64: ${error}`));
+            };
+            reader.readAsDataURL(audioBlob);
+          } catch (error) {
+            reject(new Error(`Failed to process audio: ${error}`));
+          }
         };
 
-        mediaRecorderRef.current.stop();
-        playNotification("assets/notify/stopsttandsend.mp3");
-
-        mediaRecorderRef.current.stream
-          .getTracks()
-          .forEach((track) => track.stop());
+        // Stop recording and cleanup
+        try {
+          mediaRecorderRef.current.stop();
+          playNotification("assets/notify/stopsttandsend.mp3");
+          mediaRecorderRef.current.stream
+            .getTracks()
+            .forEach((track) => track.stop());
+        } catch (error) {
+          reject(new Error(`Failed to stop recording: ${error}`));
+        }
       } else {
         reject(new Error("No recording in progress"));
       }

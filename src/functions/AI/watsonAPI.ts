@@ -110,60 +110,49 @@ export async function startInteract(
     }),
   };
 
-  if (userInput) {
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
-        //`http://localhost:4050/${endpoint}`,
-        optionsText
-      );
-      console.log(res);
-      const data = await res.json();
+  setLoading(true);
+  try {
+    const res = await fetch(
+      //`https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
+      `http://localhost:4050/${endpoint}`,
+      optionsText
+    );
+    console.log(res);
+    const data = await res.json();
 
-      setLoading(false);
-      console.log(data);
+    setLoading(false);
+    console.log(data);
 
-      let answer: string;
-      if (data.response == "") {
-        const plang = lang;
-        const replies = {
-          en: "Sorry, I could not find what you were looking for.",
-          fr: "Désolé, je n'ai pas trsouvé ce que vous cherchiez.",
-          es: "Lo siento, no pude encontrar lo que buscabas.",
-          pt: "Desculpe, não consegui encontrar o que procurava",
-          lg: "Bambi, Ssisobodde kufuna ekyo kyo'nonya.",
-          nyn: "Ihangane, ongera ubivuge.",
-          sw: "Samahani, siwezi kupata ulichokuwa unatafuta.",
-        };
+    let answer: string;
+    if (data[responser] == "") {
+      const plang = lang;
+      const replies = {
+        en: "Sorry, I could not find what you were looking for.",
+        fr: "Désolé, je n'ai pas trsouvé ce que vous cherchiez.",
+        es: "Lo siento, no pude encontrar lo que buscabas.",
+        pt: "Desculpe, não consegui encontrar o que procurava",
+        lg: "Bambi, Ssisobodde kufuna ekyo kyo'nonya.",
+        nyn: "Ihangane, ongera ubivuge.",
+        sw: "Samahani, siwezi kupata ulichokuwa unatafuta.",
+      };
 
-        answer = replies[plang as keyof typeof replies] || replies.en;
-        if (endpoint == "stt") {
-          const data = await res.json();
-          const transcript = data.transcript;
-          setMessages([
-            ...messages,
-            userMessage,
-            { role: "user", content: transcript.trim() },
-          ]);
-        }
-      } else {
-        answer = data[responser];
-        console.log(answer);
-      }
-      setMessages([
-        ...messages,
-        userMessage,
-        { role: "bot", content: answer.trim() },
-      ]);
-    } catch (error) {
-      setMessages([
-        ...messages,
-        userMessage,
-        { role: "bot", content: "Something went wrong." },
-      ]);
-      console.error(error);
-      setLoading(false);
+      answer = replies[plang as keyof typeof replies] || replies.en;
+    } else {
+      answer = data[responser];
+      console.log(answer);
     }
+    setMessages([
+      ...messages,
+      userMessage,
+      { role: "bot", content: answer.trim() },
+    ]);
+  } catch (error) {
+    setMessages([
+      ...messages,
+      userMessage,
+      { role: "bot", content: "Something went wrong." },
+    ]);
+    console.error(error);
+    setLoading(false);
   }
 }

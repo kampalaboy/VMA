@@ -3,28 +3,26 @@ import React from "react";
 import { FaMicrophone, FaStop } from "react-icons/fa";
 import useSTT from "./AI/stt";
 import { Message } from "../types/message";
-import { startInteract } from "./AI/agnosticVoiceAPI";
+//import { startInteract } from "./AI/agnosticVoiceAPI";
+import { startVoiceInteract } from "./AI/watsonVoiceAPI";
 
 interface VoiceButtonProps {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   messages: Message[];
-  //userMessage: Message;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  user: string;
   userId: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   lang: string;
-  //responser: string;
+  endpoint: string;
+  responser: string;
 }
 
 const VoiceButton: React.FC<VoiceButtonProps> = ({
   setMessages,
   messages,
-  //userMessage,
-  setLoading,
-  user,
   userId,
+  setLoading,
   lang,
-  //responser,
+  endpoint,
 }) => {
   const { isRecording, startSTT, stopSTT } = useSTT();
 
@@ -32,6 +30,7 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
     if (isRecording) {
       try {
         const { audioData, audioUrl } = await stopSTT();
+        console.log(audioData);
         if (audioUrl && audioData) {
           const userMessage = {
             role: "user",
@@ -41,15 +40,16 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
           setMessages([...messages, userMessage]);
 
           // Send the recording to webhook
-          await startInteract(
+          await startVoiceInteract(
             setMessages,
             setLoading,
-            messages,
-            user,
-            userId,
-            lang,
             userMessage,
-            audioData
+            messages,
+            userId,
+            audioData,
+            audioUrl,
+            lang,
+            endpoint
           );
         }
       } catch (error) {

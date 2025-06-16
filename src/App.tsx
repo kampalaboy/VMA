@@ -20,7 +20,7 @@ const App: React.FC = () => {
 
   const [userInput, setUserInput] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
-  const [user, setUser] = useState<string>("");
+  //const [user, setUser] = useState<string>("");
   const [lang, setLang] = useState<string>("");
 
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
@@ -35,7 +35,7 @@ const App: React.FC = () => {
   const pid = urlParams.get("id") || "";
 
   useEffect(() => {
-    setUser(pname);
+    //setUser(pname);
     setUserId(pid);
     setLang(plang);
   }, [pname, pid, plang]);
@@ -160,23 +160,12 @@ const App: React.FC = () => {
                 setMessages={setMessages}
                 messages={messages}
                 setLoading={setLoading}
-                user={user}
                 userId={userId}
-                //userInput=""
                 lang={lang}
+                endpoint={"STT"}
+                responser="transcript"
               />
             )}
-            {/* <button
-                    id="query"
-                    className="bg-transparent p-1 rounded-full"
-                    type="submit"
-                    onClick={() => {
-                      setSelectedEndpoint("watsonchat");
-                      setResponser("response");
-                    }}
-                  >
-                    <MdSend className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl" />
-                  </button> */}
           </div>
         </form>
       </div>

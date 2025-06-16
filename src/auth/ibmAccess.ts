@@ -26,6 +26,7 @@ async function getAuthToken(apiKey: string): Promise<string> {
 
     if (response.ok) {
       const responseData = await response.json();
+      console.log(response);
       return responseData.access_token;
     } else {
       throw new Error("Failed to get authentication token");
@@ -43,6 +44,7 @@ async function updateTokenIfNeeded(apiKey: string): Promise<void> {
   ) {
     console.log("updating token");
     token = await getAuthToken(apiKey);
+    console.log(token);
     tokenUpdatedAt = new Date();
     headers = {
       "Content-Type": "application/json",

@@ -32,7 +32,7 @@ const Messages: React.FC<MessagesProps> = ({
         >
           {message.audioUrl && (
             <audio controls className="mb-2 max-w-full">
-              <source src={message.audioUrl} type="audio/wav" />
+              <source src={message.audioUrl} type="audio/mp3" />
               Your browser does not support the audio element.
             </audio>
           )}

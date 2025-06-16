@@ -1,6 +1,6 @@
 import { Message } from "../../types/message";
 
-interface VoiceAPIPayload {
+interface APIPayload {
   headers: {
     host: string;
     "user-agent": string;
@@ -29,6 +29,7 @@ interface VoiceAPIPayload {
           type: string;
         };
         date: number;
+        chatInput: string;
         voice: {
           file_name: string;
           mime_type: string;
@@ -46,7 +47,8 @@ export async function startInteract(
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   messages: Message[],
   user: string,
-  userId: string,
+  //userId: string,
+  userInput: string,
   lang: string,
   userMessage: Message,
   audioData: string // Base64 audio data from microphone
@@ -56,7 +58,7 @@ export async function startInteract(
   try {
     const webhookUrl =
       "https://n8n.ecobetug.com/webhook/bf4dd093-bb02-472c-9454-7ab9af97bd1d";
-    const payload: VoiceAPIPayload[] = [
+    const payload: APIPayload[] = [
       {
         headers: {
           host: "n8n.ecobetug.com",
@@ -68,27 +70,28 @@ export async function startInteract(
         query: {},
         body: [
           {
-            sessionId: 1,
+            sessionId: Math.floor(Math.random() * 1000000),
             update_id: Math.floor(Math.random() * 1000000),
             message: {
               message_id: Math.floor(Math.random() * 1000000),
               from: {
-                id: parseInt(userId) || 12345,
+                id: Math.floor(Math.random() * 1000000),
                 is_bot: false,
                 first_name: user,
                 username: user,
                 language_code: lang,
               },
               chat: {
-                id: parseInt(userId) || 5384581914,
+                id: Math.floor(Math.random() * 1000000),
                 first_name: user,
                 username: user,
                 type: "private",
               },
               date: Math.floor(Date.now() / 1000),
+              chatInput: userInput,
               voice: {
                 file_name: userMessage.audioUrl || "",
-                mime_type: "audio/mp3",
+                mime_type: "audio/webm",
                 data: audioData,
               },
             },
@@ -118,7 +121,7 @@ export async function startInteract(
     const audioArrayBuffer = await response.arrayBuffer();
 
     // Create blob from array buffer
-    const botAudioBlob = new Blob([audioArrayBuffer], { type: "audio/mp3" });
+    const botAudioBlob = new Blob([audioArrayBuffer], { type: "audio/mpeg" });
     const botAudioUrl = URL.createObjectURL(botAudioBlob);
 
     // Add both user message and bot response to chat
