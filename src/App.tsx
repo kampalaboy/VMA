@@ -162,7 +162,7 @@ const App: React.FC = () => {
                 setLoading={setLoading}
                 userId={userId}
                 lang={lang}
-                endpoint={"STT"}
+                endpoint="convo"
                 responser="transcript"
               />
             )}

@@ -4,7 +4,7 @@ import { FaMicrophone, FaStop } from "react-icons/fa";
 import useSTT from "./AI/stt";
 import { Message } from "../types/message";
 //import { startInteract } from "./AI/agnosticVoiceAPI";
-import { startVoiceInteract } from "./AI/watsonVoiceAPI";
+import { startVoiceInteract } from "./AI/watsonConvoAPI";
 
 interface VoiceButtonProps {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
