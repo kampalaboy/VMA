@@ -1,4 +1,5 @@
 import { Message } from "../../types/message";
+//simport { base64toBlob } from "../../utils/base64";
 import { startInteract } from "./watsonAPI";
 
 export async function startVoiceInteract(
@@ -59,8 +60,8 @@ export async function startVoiceInteract(
 
     const transcript = data["transcript"];
     const transcriptUserMessage = { role: "user", content: transcript };
-    startInteract(
-      setMessages,
+    const answer = await startInteract(
+      () => {},
       setLoading,
       updatedMessages,
       transcript,
@@ -70,6 +71,44 @@ export async function startVoiceInteract(
       "watsonchat",
       "response"
     );
+
+    // Send the answer to TTS
+    const ttsOptions: RequestInit = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "RAG-APP-API-Key": "Quick2go!",
+      },
+      body: JSON.stringify({
+        text: answer,
+      }),
+    };
+
+    const ttsResponse = await fetch(
+      "https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/TTS",
+      //"http://localhost:4050/TTS",
+      ttsOptions
+    );
+
+    if (!ttsResponse.ok) {
+      throw new Error(`TTS HTTP error! status: ${ttsResponse.status}`);
+    }
+
+    //const audioData = await ttsResponse.arrayBuffer();
+    const audioBlob = await ttsResponse.blob();
+    //const audioBlob = new Blob([audioData], { type: "audio/mpeg" });«
+    //const audioBlob = new Blob([audioData], { type: "audio/mp3" });
+
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        role: "bot",
+        content: "🎤 Bot at " + new Date().toLocaleTimeString(),
+        audioUrl: audioUrl,
+      },
+    ]);
   } catch (error) {
     console.error("STT Error:", error);
 

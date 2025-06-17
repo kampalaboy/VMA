@@ -34,7 +34,7 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({
         if (audioUrl && audioData) {
           const userMessage = {
             role: "user",
-            content: "🎤 Voice message",
+            content: "🎤 You at " + new Date().toLocaleTimeString(),
             audioUrl: audioUrl,
           };
           setMessages([...messages, userMessage]);

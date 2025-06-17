@@ -113,8 +113,8 @@ export async function startInteract(
   setLoading(true);
   try {
     const res = await fetch(
-      //`https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
-      `http://localhost:4050/${endpoint}`,
+      `https://cti-app.1r1lw5ypdyix.us-east.codeengine.appdomain.cloud/${endpoint}`,
+      //`http://localhost:4050/${endpoint}`,
       optionsText
     );
     console.log(res);
@@ -146,6 +146,7 @@ export async function startInteract(
       userMessage,
       { role: "bot", content: answer.trim() },
     ]);
+    return answer.trim();
   } catch (error) {
     setMessages([
       ...messages,
@@ -154,5 +155,6 @@ export async function startInteract(
     ]);
     console.error(error);
     setLoading(false);
+    return error;
   }
 }
