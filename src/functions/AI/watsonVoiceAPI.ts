@@ -53,8 +53,6 @@ export async function startVoiceInteract(
     const data = await res.json();
     console.log("STT Response:", data);
 
-    setLoading(false);
-
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
@@ -62,7 +60,7 @@ export async function startVoiceInteract(
     const transcriptUserMessage = { role: "user", content: transcript };
     const answer = await startInteract(
       () => {},
-      setLoading,
+      () => {},
       updatedMessages,
       transcript,
       userId,
@@ -109,6 +107,7 @@ export async function startVoiceInteract(
         audioUrl: audioUrl,
       },
     ]);
+    setLoading(false);
   } catch (error) {
     console.error("STT Error:", error);
 
